@@ -9,7 +9,9 @@ import pymongo
 import datetime
 import redis
 
+
 class SellPipeline(object):
+
     def process_item(self, item, spider):
         for k, v in item.items():
             if k != '小区概况' and isinstance(v, str):
@@ -54,10 +56,10 @@ class DBPipeline(object):
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            mongo_uri = crawler.settings.get('MONGO_URI'),
-            mongo_db = crawler.settings.get('MONGO_DB'),
-            mongo_collection= crawler.settings.get('MONGO_COLLECTION'),
-            redis_uri = crawler.settings.get('REDIS_INFO_URI')
+            mongo_uri=crawler.settings.get('MONGO_URI'),
+            mongo_db=crawler.settings.get('MONGO_DB'),
+            mongo_collection=crawler.settings.get('MONGO_COLLECTION'),
+            redis_uri=crawler.settings.get('REDIS_INFO_URI')
         )
 
     def open_spider(self, spider):
@@ -72,7 +74,7 @@ class DBPipeline(object):
         redis_key_id = item['链家编号']
         redis_key_totalPrice = 'LianjiaSell:{}:totalPrice'.format(item['链家编号'])
         redis_key_unitPrice = 'LianjiaSell:{}:unitPrice'.format(item['链家编号'])
-        redis_key_mixPayment = 'LianjiaSell:{}:mixPayment'.format(item['链家编号'])
+        redis_key_minPayment = 'LianjiaSell:{}:mixPayment'.format(item['链家编号'])
         redis_key_follower = 'LianjiaSell:{}:follower'.format(item['链家编号'])
         redis_key_day7visitor = 'LianjiaSell:{}:day7visitor'.format(item['链家编号'])
         redis_key_day30vistor = 'LianjiaSell:{}:day30visitor'.format(item['链家编号'])
@@ -80,7 +82,7 @@ class DBPipeline(object):
         # redis中插入变量数据
         self.redis_client.zadd(redis_key_totalPrice, item['总价'], name)
         self.redis_client.zadd(redis_key_unitPrice, item['单价'], name)
-        self.redis_client.zadd(redis_key_mixPayment, item['最低首付'], name)
+        self.redis_client.zadd(redis_key_minPayment, item['最低首付'], name)
         self.redis_client.zadd(redis_key_follower, item['房源热度']['关注人数'], name)
         self.redis_client.zadd(redis_key_day7visitor, item['房源热度']['七天带看'], name)
         self.redis_client.zadd(redis_key_day30vistor, item['房源热度']['三十天带看'], name)
@@ -93,7 +95,7 @@ class DBPipeline(object):
             # redis数据插入后从item中去除相关变量, 再写入mongodb中
             for key in ['总价', '单价', '最低首付', '房源热度']:
                 item.pop(key)
-            self.mongo_db[self.mongo_collection].update_one({'链家编号':dict(item)['链家编号']},{'$set':dict(item)},True)
+            self.mongo_db[self.mongo_collection].update_one({'链家编号':dict(item)['链家编号']}, {'$set':dict(item)}, True)
             return item
 
     def close_spider(self, spider):

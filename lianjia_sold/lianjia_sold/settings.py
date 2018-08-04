@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for lianjia_redis project
+# Scrapy settings for lianjia_sold project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,54 +9,39 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'lianjia_redis'
+BOT_NAME = 'lianjia_sold'
 
-SPIDER_MODULES = ['lianjia_redis.spiders']
-NEWSPIDER_MODULE = 'lianjia_redis.spiders'
+SPIDER_MODULES = ['lianjia_sold.spiders']
+NEWSPIDER_MODULE = 'lianjia_sold.spiders'
 
+# MongoDB Connection
+MONGO_URI = 'mongodb://192.168.1.59:27017'
+MONGO_DB = 'lianjia'
+
+# ElasticSearch Connection
+ELASTICSEARCH_NODE_1 = '198.181.46.127:9200'
+ELASTICSEARCH_INDEX = 'crawler.sold.v3'
+ELASTICSEARCH_TYPE = 'info'
+
+# Redis Connection
+REDIS_URI = 'redis://192.168.1.59:6379/1'
+REDIS_KEY_LINK = 'LianjiaSold:link'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'lianjia_redis (+http://www.yourdomain.com)'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
-
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
-# mongodb server
-MONGO_URI = 'mongodb://mongo:mongo2018@140.143.237.148:27020,198.181.46.127:27020/?replicaSet=rs-27020'
-MONGO_DB = 'scrapy-lianjia_sell'
-MONGO_COLLECTION = 'ershoufang'
-
-# 指定redis主机
-# REDIS_HOST='140.143.237.148'
-# REDIS_PORT=6379
-REDIS_URL='redis://:redis2018@140.143.237.148:6379/0'
-REDIS_INFO_URI='redis://:redis2018@140.143.237.148:6379/1'
-
-# 使用scrapy-redis里面的去重组件.
-DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-# 使用scrapy-redis里面的调度器
-SCHEDULER = "scrapy_redis.scheduler.Scheduler"
-# 允许暂停后,能保存进度
-SCHEDULER_PERSIST = True
-
-# 指定排序爬取地址时使用的队列，
-# 默认的 按优先级排序(Scrapy默认)，由sorted set实现的一种非FIFO、LIFO方式。
-SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
-# 可选的 按先进先出排序（FIFO）
-# SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
-# 可选的 按后进先出排序（LIFO）
-# SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderStack'
-
-
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 16
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_TIMEOUT = 10
+# DOWNLOAD_DELAY = 0
+# DOWNLOADER_CLIENT_TLS_METHOD = "TLSv1.0"
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -65,25 +50,32 @@ SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
 #COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
-#TELNETCONSOLE_ENABLED = False
+TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  'Accept-Language': 'en',
+   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+   'Accept-Encoding': 'gzip, deflate, br',
+   'Accept-Language': 'zh-CN,zh;q=0.9',
+   'Cache-Control': 'max-age=0',
+   'Connection': 'keep-alive',
+   # 'Host': 'sh.lianjia.com',
+   'Upgrade-Insecure-Requests': 1,
+   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
 }
 
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'lianjia_redis.middlewares.LianjiaRedisSpiderMiddleware': 543,
+#    'Lianjia_Sold.middlewares.LianjiaSoldSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'lianjia_redis.middlewares.FilterMiddleware': 543,
-   #  'lianjia_redis.middlewares.RandomUserAgentDownloaderMiddleware': 500,
+   # 'Lianjia_Sold.middlewares.LianjiaSoldDownloaderMiddleware': 543,
+    'lianjia_sold.middlewares.FilterDownloaderMiddleware': 500,
+   # 'Lianjia_Sold.middlewares.IgnoreDuplicateDownloaderMiddleware': 500,
 }
 
 # Enable or disable extensions
@@ -95,10 +87,13 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'lianjia_redis.pipelines.SellPipeline': 300,
-    'lianjia_redis.pipelines.DBPipeline': 350,
-    'scrapy_redis.pipelines.RedisPipeline': 400,
+   'lianjia_sold.pipelines.ItemPipeline': 300,
+  'lianjia_sold.pipelines.MongoPipeline': 350,
+#   'Lianjia_Sold.pipelines.ElasticSearchPipeline': 400,
 }
+
+# Enable and configure log
+LOG_LEVEL = 'INFO'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

@@ -1,27 +1,63 @@
 # -*- coding: utf-8 -*-
-import scrapy
 import json
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import Rule
-from scrapy_redis.spiders import RedisCrawlSpider, RedisSpider
-from lianjia_redis.items import SellItem
+import scrapy
+from Lianjia_Sell.items import SellItem
 
 
-class SellSpider(RedisCrawlSpider):
-    name = 'sell'
-    allow_domains = ['sh.lianjia.com', 'su.lianjia.com']
+class DistrictSpider(scrapy.Spider):
+    name = 'district'
+    allowed_domains = ['www.lianjia.com']
 
-    redis_key = 'SellSpider:start_urls'
-    # start_urls = ['http://www.lianjia.com/']
+    def start_requests(self):
+        # load lianjia-ershoufang website url
+        yield scrapy.Request(url='https://sh.lianjia.com/ershoufang/rs/', meta={'city':'sh', 'referer':'1st'}, callback=self.parse, dont_filter=True)
 
-    rules = (
-        Rule(LinkExtractor(allow=('/ershoufang/\d{12}.html',)), callback='parse_one', follow=False),
-        Rule(LinkExtractor(allow=('/ershoufang/',)), follow=True),
-    )
+    def parse(self, response):
+        print('url:{}, meta:{}'.format(response.url, response.request.meta.items()))
+        meta = response.request.meta['city']
+
+        if response.request.meta.get('referer', 'other') == '1st':
+            districts = response.css(
+                'div.position > dl:nth-child(2) > dd > div:nth-child(1) > div > a::attr(href)'
+            ).extract()  # 区域查询(list)
+            for district in districts:
+                url = 'https://{}.lianjia.com{}'.format(meta, district)
+                yield scrapy.Request(url=url, meta={'city': meta, 'district': 'location'}, callback=self.parse, dont_filter=True)
+
+        if response.request.meta.get('district', 'other') == 'location':
+            print('meta-->location')
+            locations = response.css(
+                'body > div.m-filter > div.position > dl:nth-child(2) > dd > div > div:nth-child(2) > a::attr(href)'
+            ).extract()
+            for location in locations:
+                url = 'https://{}.lianjia.com{}'.format(meta, location)
+                yield scrapy.Request(url=url, meta={'city': meta, 'page': 'index'}, callback=self.parse, dont_filter=True)
+
+        if response.request.meta.get('page', 'other') == 'index':
+            print('meta-->index')
+            urls = response.css('.leftContent ul li .info.clear')
+            for url in urls:
+                one_page_url = url.css('.title a::attr(href)').extract_first()
+                yield scrapy.Request(url=one_page_url, meta={'city': meta}, callback=self.parse_one, dont_filter=True)
+
+            page_url = response.css(
+                'div.leftContent > div.contentBottom.clear > div.page-box.fr > div::attr(page-url)'
+            ).extract_first()
+            cur_page = response.css(
+                'div.leftContent > div.contentBottom.clear > div.page-box.fr > div::attr(page-data)'
+            ).extract_first()
+
+            if page_url and cur_page:
+                if json.loads(cur_page)['curPage'] < json.loads(cur_page)['totalPage']:
+                    page_url = page_url.replace('page','').format(json.loads(cur_page)['curPage']+1)
+                    next_page_url = 'https://{}.lianjia.com{}'.format(meta, page_url)
+                    yield scrapy.Request(url=next_page_url, meta={'city': meta, 'page': 'index'}, callback=self.parse, dont_filter=True)
+                else:
+                    print('CRAWLER QUEUE: {} => done.'.format(response.request.headers.get('referer', 'NONE-REFERER')))
 
     def parse_one(self, response):
         item = SellItem()
-        meta = response.url[8:10]
+        meta = response.request.meta['city']
 
         house_type = response.css(
             'div.transaction > div.content > ul > li:nth-child(4) > span:nth-child(2)::text'
@@ -123,12 +159,12 @@ class SellSpider(RedisCrawlSpider):
             item['户型分间'] = model_details
             item['房源热度'] = {'关注人数':int(follower)}
             item['小区概况'] = {'hid':hid, 'rid':rid}
-            item['城市'] = meta
 
-            house_stat_url = 'https://{0}.lianjia.com/ershoufang/housestat?hid={1}&rid={2}'.format(meta, rid, hid)  # request时参数错位
-            request = scrapy.Request(url=house_stat_url, meta={'city':meta}, callback=self.parse_location, dont_filter=True)
-            request.meta['item'] = item
-            yield request
+            if hid and rid:
+                house_stat_url = 'https://{0}.lianjia.com/ershoufang/housestat?hid={1}&rid={2}'.format(meta, rid, hid)  # request时参数错位
+                request = scrapy.Request(url=house_stat_url, meta={'city':meta}, callback=self.parse_location, dont_filter=True)
+                request.meta['item'] = item
+                yield request
 
     def parse_location(self, response):
         item = response.meta['item']
