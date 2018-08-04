@@ -40,7 +40,7 @@ class SoldSpider(scrapy.Spider):
         page_url = response.css('div.contentBottom.clear > div.page-box.fr > div::attr(page-url)').extract_first()
         cur_page = response.css('div.contentBottom.clear > div.page-box.fr > div::attr(page-data)').extract_first()
         if page_url and cur_page:
-            if json.loads(cur_page)['curPage'] < 3:#json.loads(cur_page)['totalPage']:  # totalPage=100
+            if json.loads(cur_page)['curPage'] < json.loads(cur_page)['totalPage']:  # totalPage=100
                 page_url = page_url.replace('page', '').format(json.loads(cur_page)['curPage'] + 1)
                 next_page_url = 'https://{}.lianjia.com{}'.format(meta, page_url)
                 # print(next_page_url)
