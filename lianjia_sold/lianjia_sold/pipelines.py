@@ -6,10 +6,10 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
 from datetime import datetime
-# import elasticsearch
+import elasticsearch
 from uuid import uuid1
-# from elasticsearch import Elasticsearch
-# from elasticsearch.helpers import bulk
+from elasticsearch import Elasticsearch
+from elasticsearch.helpers import bulk
 from scrapy.exceptions import DropItem
 
 
@@ -105,30 +105,28 @@ class MongoPipeline(object):
 
 class ElasticSearchPipeline(object):
     def __init__(self, node, index, type):
-        self.elasticsearch_node = node
-        self.elasticsearch_index = index
-        self.elasticsearch_type = type
+        self.es_node = node
+        self.es_index = index
+        self.es_type = type
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            node = crawler.settings.get('ELASTICSEARCH_NODE_1'),
-            index= crawler.settings.get('ELASTICSEARCH_INDEX'),
-            type = crawler.settings.get('ELASTICSEARCH_TYPE')
+            node=crawler.settings.get('ES_NODE'),
+            index=crawler.settings.get('ES_INDEX'),
+            type=crawler.settings.get('ES_TYPE')
         )
 
     def open_spider(self, spider):
-        self.es = Elasticsearch([self.elasticsearch_node])
-        if not self.es.indices.exists(index=self.elasticsearch_index):
-            self.es.indices.create(index=self.elasticsearch_index)
-        else:
-            print('ELASTICSEARCH.INDEX: {0} is exists'.format(self.elasticsearch_index))
+        self.es = Elasticsearch([self.es_node])
+        if not self.es.indices.exists(index=self.es_index):
+            self.es.indices.create(index=self.es_index)
 
     def es_create(self, data):
         doc = {
             '_op_type': 'create',
-            '_index': self.elasticsearch_index,
-            '_type': self.elasticsearch_type,
+            '_index': self.es_index,
+            '_type': self.es_type,
             '_id': uuid1(),
             '_source': dict(data)
         }
@@ -139,7 +137,7 @@ class ElasticSearchPipeline(object):
         self.es.ingest.put_pipeline(
             id=id,
             body={
-                "description": "crawler.lianjia",
+                "description": "lianjia.ershoufang.sold",
                 "processors": [
                     {
                         "date": {

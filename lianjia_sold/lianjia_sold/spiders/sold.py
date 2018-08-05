@@ -17,6 +17,7 @@ class SoldSpider(scrapy.Spider):
     def parse(self, response):
         meta = response.request.meta['city']
         urls = response.css('div.info > div.title > a::attr(href)').extract()
+        print(response.url)
         for url in urls:
             yield scrapy.Request(url=url, meta={'city': meta}, callback=self.parse_one, dont_filter=True)
 
@@ -43,10 +44,7 @@ class SoldSpider(scrapy.Spider):
             if json.loads(cur_page)['curPage'] < json.loads(cur_page)['totalPage']:  # totalPage=100
                 page_url = page_url.replace('page', '').format(json.loads(cur_page)['curPage'] + 1)
                 next_page_url = 'https://{}.lianjia.com{}'.format(meta, page_url)
-                # print(next_page_url)
                 yield scrapy.Request(url=next_page_url, meta={'city':meta}, callback=self.parse, dont_filter=True)
-            # else:
-            #     print('index.sold => done.')
 
     def parse_one(self, response):
         item = SoldItem()

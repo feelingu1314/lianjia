@@ -19,13 +19,12 @@ MONGO_URI = 'mongodb://192.168.1.59:27017'
 MONGO_DB = 'lianjia'
 
 # ElasticSearch Connection
-ELASTICSEARCH_NODE_1 = '198.181.46.127:9200'
-ELASTICSEARCH_INDEX = 'crawler.sold.v3'
-ELASTICSEARCH_TYPE = 'info'
+ES_NODE = '192.168.1.59:9200'
+ES_INDEX = 'lianjia.ershoufang.sold'
+ES_TYPE = 'info'
 
 # Redis Connection
 REDIS_URI = 'redis://192.168.1.59:6379/1'
-REDIS_KEY_LINK = 'LianjiaSold:link'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
@@ -88,8 +87,8 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'lianjia_sold.pipelines.ItemPipeline': 300,
-  'lianjia_sold.pipelines.MongoPipeline': 350,
-#   'Lianjia_Sold.pipelines.ElasticSearchPipeline': 400,
+   'lianjia_sold.pipelines.MongoPipeline': 350,
+   'lianjia_sold.pipelines.ElasticSearchPipeline': 400,
 }
 
 # Enable and configure log
