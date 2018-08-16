@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import scrapy
-from Lianjia_Sell.items import SellItem
+from lianjia_sell.items import SellItem
 
 
 class DistrictSpider(scrapy.Spider):
@@ -10,7 +10,10 @@ class DistrictSpider(scrapy.Spider):
 
     def start_requests(self):
         # load lianjia-ershoufang website url
-        yield scrapy.Request(url='https://sh.lianjia.com/ershoufang/rs/', meta={'city':'sh', 'referer':'1st'}, callback=self.parse, dont_filter=True)
+        yield scrapy.Request(url='https://su.lianjia.com/ershoufang/rs/', meta={'city': 'su', 'referer': '1st'},
+                             callback=self.parse, dont_filter=True)
+        yield scrapy.Request(url='https://sh.lianjia.com/ershoufang/rs/', meta={'city': 'sh', 'referer': '1st'},
+                             callback=self.parse, dont_filter=True)
 
     def parse(self, response):
         print('url:{}, meta:{}'.format(response.url, response.request.meta.items()))
@@ -155,6 +158,7 @@ class DistrictSpider(scrapy.Spider):
             item['环线信息'] = loop_info
             item['建造时间'] = build_time
             item['链家编号'] = lj_id
+            item['城市'] = meta
             item['房源链接'] = response.url
             item['户型分间'] = model_details
             item['房源热度'] = {'关注人数':int(follower)}

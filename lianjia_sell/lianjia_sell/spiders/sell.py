@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import scrapy
-from Lianjia_Sell.items import SellItem
+from lianjia_sell.items import SellItem
 
 
 class LianjiaSpider(scrapy.Spider):
@@ -19,8 +19,10 @@ class LianjiaSpider(scrapy.Spider):
         #         yield scrapy.Request(url=redis_url.decode('utf-8'), meta={'city':redis_url.decode('utf-8')[8:10]}, callback=self.parse_one, dont_filter=True)
 
         # load lianjia-ershoufang website url
-        # yield scrapy.Request(url='https://su.lianjia.com/ershoufang/rs/', meta={'city':'su', 'referer':'1st'}, callback=self.parse, dont_filter=True)
-        yield scrapy.Request(url='https://sh.lianjia.com/ershoufang/rs/', meta={'city':'sh', 'referer':'1st'}, callback=self.parse, dont_filter=True)
+        yield scrapy.Request(url='https://su.lianjia.com/ershoufang/rs/', meta={'city': 'su', 'referer': '1st'},
+                             callback=self.parse, dont_filter=True)
+        yield scrapy.Request(url='https://sh.lianjia.com/ershoufang/rs/', meta={'city': 'sh', 'referer': '1st'},
+                             callback=self.parse, dont_filter=True)
 
     def parse(self, response):
         meta = response.request.meta['city']
@@ -28,35 +30,6 @@ class LianjiaSpider(scrapy.Spider):
         for url in urls:
             one_page_url = url.css('.title a::attr(href)').extract_first()
             yield scrapy.Request(url=one_page_url, meta={'city': meta}, callback=self.parse_one, dont_filter=True)
-
-        # if response.request.meta.get('referer', 'other') == '1st':
-        #     districts = response.css(
-        #         'div.position > dl:nth-child(2) > dd > div:nth-child(1) > div > a::attr(href)'
-        #     ).extract()  # 区域查询(list)
-        #     metros= response.css(
-        #         'div.position > dl:nth-child(2) > dd > div:nth-child(2) > div > a::attr(href)'
-        #     ).extract()  # 地铁查询(list)
-        #     for district in districts:
-        #         url = 'https://{}.lianjia.com{}'.format(meta, district)
-        #         yield scrapy.Request(url=url, meta={'city': meta, 'district': 'location'}, callback=self.parse, dont_filter=True)
-        #     for metro in metros:
-        #         url = 'https://{}.lianjia.com{}'.format(meta, metro)
-        #         yield scrapy.Request(url=url, meta={'city': meta, 'metro': 'station'}, callback=self.parse, dont_filter=True)
-        #
-        # if response.request.meta.get('district', 'other')  == 'location':
-        #     locations = response.css(
-        #         'body > div.m-filter > div.position > dl:nth-child(2) > dd > div > div:nth-child(2) > a::attr(href)'
-        #     ).extract()
-        #     for location in locations:
-        #         url = 'https://{}.lianjia.com{}'.format(meta, location)
-        #         yield scrapy.Request(url=url, meta={'city': meta}, callback=self.parse, dont_filter=True)
-        # if response.request.meta.get('metro', 'other') == 'station':
-        #     stations = response.css(
-        #         'div.position > dl:nth-child(2) > dd > div:nth-child(2) > div:nth-child(2) > a::attr(href)'
-        #     ).extract()  # 地铁站查询(list)
-        #     for station in stations:
-        #         url = 'https://{}.lianjia.com{}'.format(meta, station)
-        #         yield scrapy.Request(url=url, meta={'city': meta}, callback=self.parse, dont_filter=True)
 
         page_url = response.css(
             'div.leftContent > div.contentBottom.clear > div.page-box.fr > div::attr(page-url)'
@@ -67,11 +40,9 @@ class LianjiaSpider(scrapy.Spider):
 
         if page_url and cur_page:
             if json.loads(cur_page)['curPage'] < json.loads(cur_page)['totalPage']:
-                page_url = page_url.replace('page','').format(json.loads(cur_page)['curPage']+1)
+                page_url = page_url.replace('page', '').format(json.loads(cur_page)['curPage']+1)
                 next_page_url = 'https://{}.lianjia.com{}'.format(meta, page_url)
                 yield scrapy.Request(url=next_page_url, meta={'city': meta}, callback=self.parse, dont_filter=True)
-            else:
-                print('CRAWLER QUEUE: {} => done.'.format(response.request.headers.get('referer', 'NONE-REFERER')))
 
     def parse_one(self, response):
         item = SellItem()
@@ -107,7 +78,7 @@ class LianjiaSpider(scrapy.Spider):
             item['交易属性'] = {}
             trade_attr_items = response.css(
                 '#introduction > div > div > div.transaction > div.content > ul > li > span.label::text'
-            ).extract()# 标签键
+            ).extract()  # 标签键
             for i, trade_attr_key in enumerate(trade_attr_items, 1):
                 trade_attr_value = response.css(
                     '#introduction > div > div > div.transaction > div.content > ul > li:nth-child({}) > span:nth-child(2)::text'.format(i)
@@ -148,16 +119,18 @@ class LianjiaSpider(scrapy.Spider):
                 base_attr_value = response.css(
                     '#introduction > div > div > div.base > div.content > ul > li:nth-child({})::text'.format(i)
                 ).extract_first().strip()
-                item['基本属性'].update({base_attr_key:base_attr_value})
+                item['基本属性'].update({base_attr_key: base_attr_value})
 
             # 户型分间
             model_details = response.css('#infoList > div.row > div.col::text').extract()  # 户型分间详细
 
             # location parameter
             hid = response.css(
-                'div.sellDetailHeader > div > div > div.btnContainer::attr(data-lj_action_housedel_id)').extract_first()  # data-lj_action_housedel_id
+                'div.sellDetailHeader > div > div > div.btnContainer::attr(data-lj_action_housedel_id)'
+            ).extract_first()  # data-lj_action_housedel_id
             rid = response.css(
-                'div.sellDetailHeader > div > div > div.btnContainer::attr(data-lj_action_resblock_id)').extract_first()  # data-lj_action_resblock_id
+                'div.sellDetailHeader > div > div > div.btnContainer::attr(data-lj_action_resblock_id)'
+            ).extract_first()  # data-lj_action_resblock_id
 
             # 关注情况
             follower = response.css('#favCount::text').extract_first()  # 关注人数(int)
@@ -173,14 +146,16 @@ class LianjiaSpider(scrapy.Spider):
             item['环线信息'] = loop_info
             item['建造时间'] = build_time
             item['链家编号'] = lj_id
+            item['城市'] = meta
             item['房源链接'] = response.url
             item['户型分间'] = model_details
-            item['房源热度'] = {'关注人数':int(follower)}
-            item['小区概况'] = {'hid':hid, 'rid':rid}
+            item['房源热度'] = {'关注人数': int(follower)}
+            item['小区概况'] = {'hid': hid, 'rid': rid}
 
             if hid and rid:
                 house_stat_url = 'https://{0}.lianjia.com/ershoufang/housestat?hid={1}&rid={2}'.format(meta, rid, hid)  # request时参数错位
-                request = scrapy.Request(url=house_stat_url, meta={'city':meta}, callback=self.parse_location, dont_filter=True)
+                request = scrapy.Request(
+                    url=house_stat_url, meta={'city':meta}, callback=self.parse_location, dont_filter=True)
                 request.meta['item'] = item
                 yield request
 
@@ -206,7 +181,7 @@ class LianjiaSpider(scrapy.Spider):
 
         meta = response.request.meta['city']
         house_see_url = 'https://{0}.lianjia.com/ershoufang/houseseerecord?id={1}'.format(meta, item['小区概况']['rid'])
-        request = scrapy.Request(url=house_see_url,meta={'city':meta}, callback=self.parse_see, dont_filter=True)
+        request = scrapy.Request(url=house_see_url, meta={'city': meta}, callback=self.parse_see, dont_filter=True)
         request.meta['item'] = item
         yield request
 
@@ -215,5 +190,5 @@ class LianjiaSpider(scrapy.Spider):
         jsonresponse = json.loads(response.body_as_unicode())
         day7_visit = jsonresponse['data']['thisWeek']
         day30_visit = jsonresponse['data']['totalCnt']
-        item['房源热度'].update({'七天带看':int(day7_visit), '三十天带看':int(day30_visit)})
+        item['房源热度'].update({'七天带看': int(day7_visit), '三十天带看': int(day30_visit)})
         yield item

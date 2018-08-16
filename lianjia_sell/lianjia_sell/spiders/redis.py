@@ -2,7 +2,7 @@
 import json
 import scrapy
 from redis import ConnectionPool, StrictRedis
-from Lianjia_Sell.items import SellItem
+from lianjia_sell.items import SellItem
 
 
 class RedisSpider(scrapy.Spider):
@@ -11,13 +11,13 @@ class RedisSpider(scrapy.Spider):
 
     def start_requests(self):
         # load link in Redis into spider
-        redis_uri = 'redis://:redis2018@140.143.237.148:6379/1'
-        redis_key_link = 'LianjiaSell:link'
+        redis_uri = 'redis://192.168.1.59:6379/2'
         redis_pool = ConnectionPool.from_url(redis_uri)
         redis_client = StrictRedis(connection_pool=redis_pool)
-        for redis_url in redis_client.sscan_iter(redis_key_link):
-            if redis_url.decode('utf-8')[8:10] == 'sh':
-                yield scrapy.Request(url=redis_url.decode('utf-8'), meta={'city':redis_url.decode('utf-8')[8:10]}, callback=self.parse, dont_filter=True)
+        for city in ['sh', 'su']:
+            for redis_url in redis_client.sscan_iter('%s_ershoufang_sell:link' % city):
+                yield scrapy.Request(url=redis_url.decode('utf-8'), meta={'city': city}, callback=self.parse,
+                                     dont_filter=True)
 
     def parse(self, response):
         item = SellItem()
@@ -119,6 +119,7 @@ class RedisSpider(scrapy.Spider):
             item['环线信息'] = loop_info
             item['建造时间'] = build_time
             item['链家编号'] = lj_id
+            item['城市'] = meta
             item['房源链接'] = response.url
             item['户型分间'] = model_details
             item['房源热度'] = {'关注人数':int(follower)}

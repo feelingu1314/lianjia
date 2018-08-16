@@ -5,7 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
-from datetime import datetime
+from datetime import datetime, date
 import redis
 from uuid import uuid1
 from elasticsearch import Elasticsearch
@@ -65,105 +65,152 @@ class SellPipeline(object):
         # TimeStamp
         if item['交易属性']['上次交易'] in ['', 'NA', '未知', '暂无数据']:
             item['交易属性']['上次交易'] = '1987-09-09'
-        item['initial_time'] = datetime.now().date().strftime('%Y-%m-%d')
+        item['initial_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         return item
 
 
-class DBPipeline(object):
-    def __init__(self, mongo_uri, mongo_db, mongo_collection, redis_uri, redis_key_link):
+class MongoPipeline(object):
+    def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
-        self.mongo_collection = mongo_collection
-        self.redis_uri = redis_uri
-        self.redis_key_link = redis_key_link
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
             mongo_uri=crawler.settings.get('MONGO_URI'),
             mongo_db=crawler.settings.get('MONGO_DB'),
-            mongo_collection=crawler.settings.get('MONGO_COLLECTION'),
-            redis_uri=crawler.settings.get('REDIS_URI'),
-            redis_key_link = crawler.settings.get('REDIS_KEY_LINK')
         )
 
     def open_spider(self, spider):
-        self.redis_pool = redis.ConnectionPool.from_url(self.redis_uri)
-        self.redis_client = redis.StrictRedis(connection_pool=self.redis_pool)
-        self.mongo_client = pymongo.MongoClient(self.mongo_uri)
-        self.mongo_db = self.mongo_client[self.mongo_db]
+        self.client = pymongo.MongoClient(self.mongo_uri)
+        self.db = self.client[self.mongo_db]
 
     def process_item(self, item, spider):
         # name = item.__class__.__name__
-        name = item['initial_time']
-        redis_key_id = item['链家编号']
-        redis_key_link = item['房源链接']
-        redis_key_totalPrice = 'LianjiaSell:{}:totalPrice'.format(redis_key_id)
-        redis_key_unitPrice = 'LianjiaSell:{}:unitPrice'.format(redis_key_id)
-        redis_key_mixPayment = 'LianjiaSell:{}:mixPayment'.format(redis_key_id)
-        redis_key_follower = 'LianjiaSell:{}:follower'.format(redis_key_id)
-        redis_key_day7visitor = 'LianjiaSell:{}:day7visitor'.format(redis_key_id)
-        redis_key_day30vistor = 'LianjiaSell:{}:day30visitor'.format(redis_key_id)
+        collection = '%s_ershoufang_sell' % item['城市']
+        collection_data = '%s_ershoufang_sell_data' % item['城市']
+        query1 = self.db[collection].count({'链家编号': dict(item)['链家编号']})
+        query2 = self.db[collection].find({'链家编号': dict(item)['链家编号']}, {'_id': 0, 'initial_time': 1})
 
-        # redis中插入变量数据
-        self.redis_client.zadd(redis_key_totalPrice, item['总价'], name)
-        self.redis_client.zadd(redis_key_unitPrice, item['单价'], name)
-        self.redis_client.zadd(redis_key_mixPayment, item['最低首付'], name)
-        self.redis_client.zadd(redis_key_follower, item['房源热度']['关注人数'], name)
-        self.redis_client.zadd(redis_key_day7visitor, item['房源热度']['七天带看'], name)
-        self.redis_client.zadd(redis_key_day30vistor, item['房源热度']['三十天带看'], name)
-        print('SUCCESSFUL:', item['链家编号'])
-
-        # 使用'链家编号'判断是否在redis中存在,存在则不做操作,不存在则插入id并且在mongodb中写入数据
-        if not self.redis_client.sismember(self.redis_key_link, redis_key_link):
-            self.redis_client.sadd(self.redis_key_link, redis_key_link)
-        if self.mongo_db[self.mongo_collection].count({'链家编号':dict(item)['链家编号'], 'initial_time':dict(item)['initial_time']}) > 0:
-            raise DropItem('Duplicate item found: %s' % item['链家编号'])
-        else:
-            # redis数据插入后从item中去除相关变量, 再写入mongodb中
+        if query1 == 0:
+            self.db[collection_data].insert_one(
+                {
+                    '链家编号': dict(item)['链家编号'],
+                    '总价': [
+                        {
+                            date.today().strftime('%Y-%m-%d'): item['总价']
+                        }
+                    ],
+                    '单价': [
+                        {
+                            date.today().strftime('%Y-%m-%d'): item['单价']
+                        }
+                    ],
+                    '最低首付': [
+                        {
+                            date.today().strftime('%Y-%m-%d'): item['最低首付']
+                        }
+                    ],
+                    '关注人数': [
+                        {
+                            date.today().strftime('%Y-%m-%d'): item['房源热度']['关注人数']
+                        }
+                    ],
+                    '七天带看': [
+                        {
+                            date.today().strftime('%Y-%m-%d'): item['房源热度']['七天带看']
+                        }
+                    ],
+                    '三十天带看': [
+                        {
+                            date.today().strftime('%Y-%m-%d'): item['房源热度']['三十天带看']
+                        }
+                    ]
+                }
+            )
             for key in ['总价', '单价', '最低首付', '房源热度']:
                 item.pop(key)
-            self.mongo_db[self.mongo_collection].update_one({'链家编号':dict(item)['链家编号']},{'$set':dict(item)},True)
-            return item
+            self.db[collection].update_one({'链家编号': dict(item)['链家编号']}, {'$set': dict(item)}, True)
+        elif list(query2)[0]['initial_time'][:10] == date.today().strftime('%Y-%m-%d'):
+            raise DropItem('daily duplicate item: %s' % item['链家编号'])
+        else:
+            for key in ['总价', '单价', '最低首付']:
+                self.db[collection_data].update_one(
+                    {
+                        '链家编号': dict(item)['链家编号']
+                    },
+                    {
+                        '$push':
+                            {
+                            key:
+                                {
+                                    date.today().strftime('%Y-%m-%d'): item[key]
+                                }
+                            }
+                    }
+                )
+            for key in ['关注人数', '七天带看', '三十天带看']:
+                self.db[collection_data].update_one(
+                    {
+                        '链家编号': dict(item)['链家编号']
+                    },
+                    {
+                        '$push':
+                            {
+                            key:
+                                {
+                                    date.today().strftime('%Y-%m-%d'): dict(item)['房源热度'][key]
+                                }
+                            }
+                    }
+                )
+            for key in ['总价', '单价', '最低首付', '房源热度']:
+                item.pop(key)
+            self.db[collection].update_one({'链家编号': dict(item)['链家编号']}, {'$set': dict(item)}, True)
+        return item
 
     def close_spider(self, spider):
-        self.mongo_client.close()
+        self.client.close()
 
 
 class ElasticSearchPipeline(object):
-    def __init__(self, node, index, type, redis_uri):
-        self.elasticsearch_node = node
-        self.elasticsearch_index = index
-        self.elasticsearch_type = type
-        self.redis_pool = redis.ConnectionPool.from_url(redis_uri)
-        self.redis_client = redis.StrictRedis(connection_pool=self.redis_pool)
+    def __init__(self, node, index, type, mongo_uri, mongo_db):
+        self.es_node = node
+        self.es_index = index
+        self.es_type = type
+        self.mongo_uri = mongo_uri
+        self.mongo_db = mongo_db
+        # self.redis_pool = redis.ConnectionPool.from_url(redis_uri)
+        # self.redis_client = redis.StrictRedis(connection_pool=self.redis_pool)
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            node=crawler.settings.get('ELASTICSEARCH_NODE_1'),
-            index=crawler.settings.get('ELASTICSEARCH_INDEX'),
-            type=crawler.settings.get('ELASTICSEARCH_TYPE'),
-            redis_uri = crawler.settings.get('REDIS_URI')
+            node=crawler.settings.get('ES_NODE'),
+            index=crawler.settings.get('ES_INDEX'),
+            type=crawler.settings.get('ES_TYPE'),
+            mongo_uri=crawler.settings.get('MONGO_URI'),
+            mongo_db=crawler.settings.get('MONGO_DB'),
+            # redis_uri=crawler.settings.get('REDIS_URI')
         )
 
     def open_spider(self, spider):
-        self.es = Elasticsearch([self.elasticsearch_node])
-        if not self.es.indices.exists(index=self.elasticsearch_index):
-            self.es.indices.create(index=self.elasticsearch_index)
-        else:
-            print('ELASTICSEARCH.INDEX: {0} is exists'.format(self.elasticsearch_index))
+        self.es = Elasticsearch([self.es_node])
+        if not self.es.indices.exists(index=self.es_index):
+            self.es.indices.create(index=self.es_index)
+
+        self.client = pymongo.MongoClient(self.mongo_uri)
+        self.db = self.client[self.mongo_db]
 
     def es_create(self, data):
         doc = {
             '_op_type': 'create',
-            '_index': self.elasticsearch_index,
-            '_type': self.elasticsearch_type,
+            '_index': self.es_index,
+            '_type': self.es_type,
             '_id': uuid1(),
             '_source': dict(data)
         }
-
         yield doc
 
     def es_pipeline_datetime(self):
@@ -177,7 +224,7 @@ class ElasticSearchPipeline(object):
                         "date": {
                             "field": "initial_time",
                             "target_field": "@timestamp",
-                            "formats": ["Y-M-d"],
+                            "formats": ["Y-M-d H:m:s"],
                             "timezone": "Asia/Shanghai"
                         }
                     }
@@ -215,19 +262,19 @@ class ElasticSearchPipeline(object):
         item['小区概况'].pop('类型')
         item['小区概况'].pop('户型推荐')
         item['小区概况'].pop('小区详情')
-        item['小区概况'].pop('经度')
-        item['小区概况'].pop('纬度')
+        # item['小区概况'].pop('经度')
+        # item['小区概况'].pop('纬度')
         item.pop('户型分间')
         item.pop('标题')
         item.pop('房源特色')
 
-        v1 = self.redis_client.zscore('LianjiaSell:{}:unitPrice'.format(item['链家编号']), item['initial_time'])
-        v2 = self.redis_client.zscore('LianjiaSell:{}:totalPrice'.format(item['链家编号']), item['initial_time'])
-        v3 = self.redis_client.zscore('LianjiaSell:{}:mixPayment'.format(item['链家编号']), item['initial_time'])
-        v4 = self.redis_client.zscore('LianjiaSell:{}:day7visitor'.format(item['链家编号']), item['initial_time'])
-        v5 = self.redis_client.zscore('LianjiaSell:{}:day30visitor'.format(item['链家编号']), item['initial_time'])
-        v6 = self.redis_client.zscore('LianjiaSell:{}:follower'.format(item['链家编号']), item['initial_time'])
-        item.update({'总价': v1, '单价': v2, '最低首付': v3, '七天带看': v4, '三十天带看': v5, '关注人数': v6})
+        collection_data = '%s_ershoufang_sell_data' % item['城市']
+        for key in ['总价', '单价', '最低首付', '关注人数', '七天带看', '三十天带看']:
+            query = self.db[collection_data].find({'链家编号': dict(item)['链家编号']}, {'_id': 0, key: 1})
+            for i in list(query)[0][key]:
+                for k, v in i.items():
+                    if k == date.today().strftime('%Y-%m-%d'):
+                        item.update({key: v})
 
         bulk(self.es, self.es_create(item), pipeline=self.es_pipeline_datetime())
         return item

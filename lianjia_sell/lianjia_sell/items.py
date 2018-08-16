@@ -35,5 +35,6 @@ class SellItem(scrapy.Item):
     七天带看 = Field()
     三十天带看 = Field()
     关注人数 = Field()
+    城市 = Field()
 
     initial_time = Field()

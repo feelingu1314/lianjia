@@ -109,43 +109,32 @@ class LianjiaSellDownloaderMiddleware(object):
 
 
 class FilterDownloaderMiddleware(object):
-    def __init__(self, mongo_uri, mongo_db, mongo_collection, redis_uri):
+    def __init__(self, redis_uri):
         self.redis_uri = redis_uri
         self.redis_pool = ConnectionPool.from_url(self.redis_uri)
         self.redis_client = StrictRedis(connection_pool=self.redis_pool)
-        self.mongo_uri = mongo_uri
-        self.mongo_db = mongo_db
-        self.mongo_collection = mongo_collection
-        self.mongo_client = MongoClient(mongo_uri)
-        self.db = self.mongo_client[self.mongo_db]
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            mongo_uri=crawler.settings.get('MONGO_URI'),
-            mongo_db=crawler.settings.get('MONGO_DB'),
-            mongo_collection=crawler.settings.get('MONGO_COLLECTION'),
-            redis_uri = crawler.settings.get('REDIS_URI'),
+            redis_uri=crawler.settings.get('REDIS_URI'),
         )
 
     def process_request(self, request, spider):
         # self.logger.debug('ignore dropping...')
-        if self.redis_client.sismember('LianjiaSell:link', request.url):
-            id = re.search(r'\d{12}',request.url).group(0)
-            date = datetime.now().date().strftime('%Y-%m-%d')
-            if self.redis_client.zrank('LianjiaSell:{}:unitPrice'.format(id), date)\
-                    and self.db[self.mongo_collection].count({'房源链接':request.url}) > 0:
-                raise IgnoreRequest()
-        else:
-            return None
+
+        return None
 
     def process_response(self, request, response, spider):
-        if not response.status == 200 and re.search(r'/ershoufang/\d{12}.html', response.url):
-            if self.redis_client.srem('LianjiaSell:link', response.url):
-                print('LINK REMOVED.',response.url)
-            raise IgnoreRequest()
-        else:
-            return response
+        redis_set = '%s_ershoufang_sell:link' % response.url[8:10]
+        if re.search(r'/ershoufang/\d{12}.html', response.url):
+            if response.status == 200:
+                self.redis_client.sadd(redis_set, response.url)
+            else:
+                self.redis_client.srem(redis_set, response.url)
+                print('error status link is removed => ', response.url)
+                raise IgnoreRequest()
+        return response
 
     def process_exception(self, request, exception, spider):
 
