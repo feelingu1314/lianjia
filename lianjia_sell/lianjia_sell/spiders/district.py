@@ -30,7 +30,8 @@ class DistrictSpider(scrapy.Spider):
         if response.request.meta.get('district', 'other') == 'location':
             print('meta-->location')
             locations = response.css(
-                'body > div.m-filter > div.position > dl:nth-child(2) > dd > div > div:nth-child(2) > a::attr(href)'
+                'body > div:nth-child(11) > div > div.position > dl:nth-child(2) > dd > div:nth-child(1) >'
+                'div:nth-child(2) > a::attr(href)'
             ).extract()
             for location in locations:
                 url = 'https://{}.lianjia.com{}'.format(meta, location)
@@ -55,8 +56,6 @@ class DistrictSpider(scrapy.Spider):
                     page_url = page_url.replace('page','').format(json.loads(cur_page)['curPage']+1)
                     next_page_url = 'https://{}.lianjia.com{}'.format(meta, page_url)
                     yield scrapy.Request(url=next_page_url, meta={'city': meta, 'page': 'index'}, callback=self.parse, dont_filter=True)
-                else:
-                    print('CRAWLER QUEUE: {} => done.'.format(response.request.headers.get('referer', 'NONE-REFERER')))
 
     def parse_one(self, response):
         item = SellItem()
