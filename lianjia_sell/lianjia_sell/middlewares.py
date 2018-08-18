@@ -8,8 +8,8 @@
 import re
 from scrapy import signals
 from scrapy.exceptions import IgnoreRequest
-from datetime import datetime
-from pymongo import MongoClient
+from datetime import datetime, date
+# from pymongo import MongoClient
 from redis import ConnectionPool, StrictRedis
 
 
@@ -122,7 +122,13 @@ class FilterDownloaderMiddleware(object):
 
     def process_request(self, request, spider):
         # self.logger.debug('ignore dropping...')
-
+        redis_key = '%s_ershoufang_sell:link:%s' % (request.url[8:10], date.today().strftime('%Y-%m-%d'))
+        if re.search(r'/ershoufang/\d{12}.html', request.url):
+            if not self.redis_client.sismember(redis_key, request.url):
+                self.redis_client.sadd(redis_key, request.url)
+                self.redis_client.expire(redis_key, 7200)
+            else:
+                raise IgnoreRequest()
         return None
 
     def process_response(self, request, response, spider):
@@ -137,6 +143,6 @@ class FilterDownloaderMiddleware(object):
         return response
 
     def process_exception(self, request, exception, spider):
-
+        print("duplicate drop!!!!")
         return None
 

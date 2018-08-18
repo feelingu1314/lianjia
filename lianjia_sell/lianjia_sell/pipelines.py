@@ -93,7 +93,44 @@ class MongoPipeline(object):
         query1 = self.db[collection].count({'链家编号': dict(item)['链家编号']})
         query2 = self.db[collection].find({'链家编号': dict(item)['链家编号']}, {'_id': 0, 'initial_time': 1})
 
-        if query1 == 0:
+        if not query1 == 0:
+            if not list(query2)[0]['initial_time'][:10] == date.today().strftime('%Y-%m-%d'):
+                for key in ['总价', '单价', '最低首付']:
+                    self.db[collection_data].update_one(
+                        {
+                            '链家编号': dict(item)['链家编号']
+                        },
+                        {
+                            '$push':
+                                {
+                                    key:
+                                        {
+                                            date.today().strftime('%Y-%m-%d'): item[key]
+                                        }
+                                }
+                        }
+                    )
+                for key in ['关注人数', '七天带看', '三十天带看']:
+                    self.db[collection_data].update_one(
+                        {
+                            '链家编号': dict(item)['链家编号']
+                        },
+                        {
+                            '$push':
+                                {
+                                    key:
+                                        {
+                                            date.today().strftime('%Y-%m-%d'): dict(item)['房源热度'][key]
+                                        }
+                                }
+                        }
+                    )
+                for key in ['总价', '单价', '最低首付', '房源热度']:
+                    item.pop(key)
+                self.db[collection].update_one({'链家编号': dict(item)['链家编号']}, {'$set': dict(item)}, True)
+            else:
+                raise DropItem('daily duplicate item: %s' % item['链家编号'])
+        else:
             self.db[collection_data].insert_one(
                 {
                     '链家编号': dict(item)['链家编号'],
@@ -132,42 +169,81 @@ class MongoPipeline(object):
             for key in ['总价', '单价', '最低首付', '房源热度']:
                 item.pop(key)
             self.db[collection].update_one({'链家编号': dict(item)['链家编号']}, {'$set': dict(item)}, True)
-        elif list(query2)[0]['initial_time'][:10] == date.today().strftime('%Y-%m-%d'):
-            raise DropItem('daily duplicate item: %s' % item['链家编号'])
-        else:
-            for key in ['总价', '单价', '最低首付']:
-                self.db[collection_data].update_one(
-                    {
-                        '链家编号': dict(item)['链家编号']
-                    },
-                    {
-                        '$push':
-                            {
-                            key:
-                                {
-                                    date.today().strftime('%Y-%m-%d'): item[key]
-                                }
-                            }
-                    }
-                )
-            for key in ['关注人数', '七天带看', '三十天带看']:
-                self.db[collection_data].update_one(
-                    {
-                        '链家编号': dict(item)['链家编号']
-                    },
-                    {
-                        '$push':
-                            {
-                            key:
-                                {
-                                    date.today().strftime('%Y-%m-%d'): dict(item)['房源热度'][key]
-                                }
-                            }
-                    }
-                )
-            for key in ['总价', '单价', '最低首付', '房源热度']:
-                item.pop(key)
-            self.db[collection].update_one({'链家编号': dict(item)['链家编号']}, {'$set': dict(item)}, True)
+        # if query1 == 0:
+        #     self.db[collection_data].insert_one(
+        #         {
+        #             '链家编号': dict(item)['链家编号'],
+        #             '总价': [
+        #                 {
+        #                     date.today().strftime('%Y-%m-%d'): item['总价']
+        #                 }
+        #             ],
+        #             '单价': [
+        #                 {
+        #                     date.today().strftime('%Y-%m-%d'): item['单价']
+        #                 }
+        #             ],
+        #             '最低首付': [
+        #                 {
+        #                     date.today().strftime('%Y-%m-%d'): item['最低首付']
+        #                 }
+        #             ],
+        #             '关注人数': [
+        #                 {
+        #                     date.today().strftime('%Y-%m-%d'): item['房源热度']['关注人数']
+        #                 }
+        #             ],
+        #             '七天带看': [
+        #                 {
+        #                     date.today().strftime('%Y-%m-%d'): item['房源热度']['七天带看']
+        #                 }
+        #             ],
+        #             '三十天带看': [
+        #                 {
+        #                     date.today().strftime('%Y-%m-%d'): item['房源热度']['三十天带看']
+        #                 }
+        #             ]
+        #         }
+        #     )
+        #     for key in ['总价', '单价', '最低首付', '房源热度']:
+        #         item.pop(key)
+        #     self.db[collection].update_one({'链家编号': dict(item)['链家编号']}, {'$set': dict(item)}, True)
+        # elif list(query2)[0]['initial_time'][:10] == date.today().strftime('%Y-%m-%d'):
+        #     raise DropItem('daily duplicate item: %s' % item['链家编号'])
+        # else:
+        #     for key in ['总价', '单价', '最低首付']:
+        #         self.db[collection_data].update_one(
+        #             {
+        #                 '链家编号': dict(item)['链家编号']
+        #             },
+        #             {
+        #                 '$push':
+        #                     {
+        #                     key:
+        #                         {
+        #                             date.today().strftime('%Y-%m-%d'): item[key]
+        #                         }
+        #                     }
+        #             }
+        #         )
+        #     for key in ['关注人数', '七天带看', '三十天带看']:
+        #         self.db[collection_data].update_one(
+        #             {
+        #                 '链家编号': dict(item)['链家编号']
+        #             },
+        #             {
+        #                 '$push':
+        #                     {
+        #                     key:
+        #                         {
+        #                             date.today().strftime('%Y-%m-%d'): dict(item)['房源热度'][key]
+        #                         }
+        #                     }
+        #             }
+        #         )
+        #     for key in ['总价', '单价', '最低首付', '房源热度']:
+        #         item.pop(key)
+        #     self.db[collection].update_one({'链家编号': dict(item)['链家编号']}, {'$set': dict(item)}, True)
         return item
 
     def close_spider(self, spider):
