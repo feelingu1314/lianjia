@@ -143,6 +143,6 @@ class FilterDownloaderMiddleware(object):
         return response
 
     def process_exception(self, request, exception, spider):
-        print("duplicate drop!!!!")
+        # print("duplicate drop!!!!")
         return None
 
