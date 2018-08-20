@@ -16,7 +16,7 @@ class DistrictSpider(scrapy.Spider):
                              callback=self.parse, dont_filter=True)
 
     def parse(self, response):
-        print('url:{}, meta:{}'.format(response.url, response.request.meta.items()))
+        # print('url:{}, meta:{}'.format(response.url, response.request.meta.items()))
         meta = response.request.meta['city']
 
         if response.request.meta.get('referer', 'other') == '1st':
