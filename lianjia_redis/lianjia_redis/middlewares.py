@@ -74,7 +74,7 @@ class FilterMiddleware(object):
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            redis_uri=crawler.settings.get('REDIS_URI'),
+            redis_uri=crawler.settings.get('REDIS_URL'),
         )
 
     def process_request(self, request, spider):
