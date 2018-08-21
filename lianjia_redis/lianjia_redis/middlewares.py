@@ -87,10 +87,14 @@ class FilterMiddleware(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        if list(filter(lambda x: x in request.url, ['sh.lianjia.com', 'su.lianjia.com'])):
-            return None
-        else:
-            raise IgnoreRequest()
+        key = '%s_ershoufang_sell:link:%s' % (request.url[8:10], date.today().strftime('%Y-%m-%d'))
+        if re.search(r'/ershoufang/\d{12}.html', request.url):
+            if not self.redis_client.sismember(key, request.url):
+                self.redis_client.sadd(key, request.url)
+                self.redis_client.expire(key, 82800)
+            else:
+                raise IgnoreRequest()
+        return None
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
@@ -99,12 +103,13 @@ class FilterMiddleware(object):
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
-        if response.status == 200:
-            return response
-        else:
-            with open('ErrorCode.txt','a') as f:
-                f.write('Timestamp:{} URL:{} ErrorCode:{}\n'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), request.url, response.status))
-            raise IgnoreRequest()
+        key = '%s_ershoufang_sell:link' % response.url[8:10]
+        if re.search(r'/ershoufang/\d{12}.html', response.url):
+            if not response.status == 200:
+                self.redis_client.srem(key, response.url)
+                # print('error status link is removed => ', response.url)
+                raise IgnoreRequest()
+        return response
 
     def process_exception(self, request, exception, spider):
         # Called when a download handler or a process_request()

@@ -25,13 +25,17 @@ ROBOTSTXT_OBEY = False
 
 # mongodb server
 MONGO_URI = 'mongodb://192.168.1.59:27017'
-MONGO_DB = 'test'
+MONGO_DB = 'lianjia'
+
+# ElasticSearch Connection
+ES_NODE = '192.168.1.59:9200'
+ES_INDEX = 'lianjia.ershoufang.sell'
+ES_TYPE = 'info'
 
 # 指定redis主机
 # REDIS_HOST='140.143.237.148'
 # REDIS_PORT=6379
-REDIS_URL='redis://192.168.1.59:6379/3'
-# REDIS_INFO_URI='redis://:redis2018@140.143.237.148:6379/1'
+REDIS_URL='redis://192.168.1.59:6379/2'
 
 # 使用scrapy-redis里面的去重组件.
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
@@ -86,7 +90,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   # 'lianjia_redis.middlewares.FilterMiddleware': 543,
+   'lianjia_redis.middlewares.FilterMiddleware': 543,
    #  'lianjia_redis.middlewares.RandomUserAgentDownloaderMiddleware': 500,
 }
 
@@ -101,7 +105,8 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     'lianjia_redis.pipelines.SellPipeline': 300,
     'lianjia_redis.pipelines.MongoPipeline': 350,
-    'scrapy_redis.pipelines.RedisPipeline': 400,
+    'lianjia_redis.pipelines.ElasticSearchPipeline': 350,
+    # 'scrapy_redis.pipelines.RedisPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

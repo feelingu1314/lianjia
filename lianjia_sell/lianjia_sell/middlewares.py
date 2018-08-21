@@ -8,8 +8,7 @@
 import re
 from scrapy import signals
 from scrapy.exceptions import IgnoreRequest
-from datetime import datetime, date
-# from pymongo import MongoClient
+from datetime import date
 from redis import ConnectionPool, StrictRedis
 
 

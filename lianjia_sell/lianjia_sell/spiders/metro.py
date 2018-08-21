@@ -51,8 +51,8 @@ class MetroSpider(scrapy.Spider):
                     page_url = page_url.replace('page', '').format(json.loads(cur_page)['curPage'] + 1)
                     next_page_url = 'https://{}.lianjia.com{}'.format(meta, page_url)
                     yield scrapy.Request(url=next_page_url, meta={'city': meta, 'page': 'index'}, callback=self.parse, dont_filter=True)
-                else:
-                    print('CRAWLER QUEUE: {} => done.'.format(response.request.headers.get('referer', 'NONE-REFERER')))
+                # else:
+                #     print('CRAWLER QUEUE: {} => done.'.format(response.request.headers.get('referer', 'NONE-REFERER')))
 
     def parse_one(self, response):
         item = SellItem()

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import Rule
+# from scrapy.linkextractors import LinkExtractor
+# from scrapy.spiders import Rule
+from datetime import date
 from scrapy_redis.spiders import RedisCrawlSpider, RedisSpider
 from lianjia_redis.items import SellItem
 
@@ -11,18 +12,19 @@ class SellSpider(RedisCrawlSpider):
     name = 'sell'
     allow_domains = ['sh.lianjia.com', 'su.lianjia.com']
 
-    redis_key = 'lianjia_ershoufang_sell:link'
+    redis_key = 'lianjia_ershoufang_sell:link:%s' % date.today().strftime('%Y-%m-%d')
     # start_urls = ['http://www.lianjia.com/']
 
-    rules = (
-        Rule(LinkExtractor(allow=()), callback='parse', follow=False)
-        # Rule(LinkExtractor(allow=('/ershoufang/\d{12}.html',)), callback='parse', follow=False),
-        # Rule(LinkExtractor(allow=('/ershoufang/',)), follow=True),
-    )
+    # rules = (
+    #     Rule(LinkExtractor(allow=()), callback='parse', follow=False)
+    #     # Rule(LinkExtractor(allow=('/ershoufang/\d{12}.html',)), callback='parse', follow=False),
+    #     # Rule(LinkExtractor(allow=('/ershoufang/',)), follow=True),
+    # )
 
     def parse(self, response):
         item = SellItem()
-        meta = response.request.meta['city']
+        meta = response.url[8:10]
+        # print(meta)
 
         house_type = response.css(
             'div.transaction > div.content > ul > li:nth-child(4) > span:nth-child(2)::text'

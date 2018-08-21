@@ -6,7 +6,7 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
 from datetime import datetime, date
-import redis
+# import redis
 from uuid import uuid1
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk

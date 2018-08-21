@@ -33,5 +33,9 @@ class SellItem(Item):
     房源热度 = Field()
     小区概况 = Field()
     房源链接 = Field()
+    七天带看 = Field()
+    三十天带看 = Field()
+    关注人数 = Field()
     城市 = Field()
+
     initial_time = Field()

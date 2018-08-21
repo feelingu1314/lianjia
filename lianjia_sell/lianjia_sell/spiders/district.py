@@ -28,7 +28,7 @@ class DistrictSpider(scrapy.Spider):
                 yield scrapy.Request(url=url, meta={'city': meta, 'district': 'location'}, callback=self.parse, dont_filter=True)
 
         if response.request.meta.get('district', 'other') == 'location':
-            print('meta-->location')
+            # print('meta-->location')
             locations = response.css(
                 'body > div:nth-child(11) > div > div.position > dl:nth-child(2) > dd > div:nth-child(1) >'
                 'div:nth-child(2) > a::attr(href)'
@@ -38,7 +38,7 @@ class DistrictSpider(scrapy.Spider):
                 yield scrapy.Request(url=url, meta={'city': meta, 'page': 'index'}, callback=self.parse, dont_filter=True)
 
         if response.request.meta.get('page', 'other') == 'index':
-            print('meta-->index')
+            # print('meta-->index')
             urls = response.css('.leftContent ul li .info.clear')
             for url in urls:
                 one_page_url = url.css('.title a::attr(href)').extract_first()
