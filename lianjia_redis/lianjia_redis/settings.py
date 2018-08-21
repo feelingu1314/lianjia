@@ -24,15 +24,14 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 ROBOTSTXT_OBEY = False
 
 # mongodb server
-MONGO_URI = 'mongodb://140.143.237.148:27010'
-MONGO_DB = 'scrapy-lianjia_sell'
-MONGO_COLLECTION = 'ershoufang'
+MONGO_URI = 'mongodb://192.168.1.59:27017'
+MONGO_DB = 'test'
 
 # 指定redis主机
 # REDIS_HOST='140.143.237.148'
 # REDIS_PORT=6379
-REDIS_URL='redis://:redis2018@140.143.237.148:6379/0'
-REDIS_INFO_URI='redis://:redis2018@140.143.237.148:6379/1'
+REDIS_URL='redis://192.168.1.59:6379/3'
+# REDIS_INFO_URI='redis://:redis2018@140.143.237.148:6379/1'
 
 # 使用scrapy-redis里面的去重组件.
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
@@ -69,8 +68,13 @@ SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  'Accept-Language': 'en',
+   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+   'Accept-Encoding': 'gzip, deflate, br',
+   'Accept-Language': 'zh-CN,zh;q=0.9',
+   'Cache-Control': 'max-age=0',
+   'Connection': 'keep-alive',
+   'Upgrade-Insecure-Requests': 1,
+   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
 }
 
 # Enable or disable spider middlewares
@@ -82,7 +86,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'lianjia_redis.middlewares.FilterMiddleware': 543,
+   # 'lianjia_redis.middlewares.FilterMiddleware': 543,
    #  'lianjia_redis.middlewares.RandomUserAgentDownloaderMiddleware': 500,
 }
 
@@ -96,7 +100,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'lianjia_redis.pipelines.SellPipeline': 300,
-    'lianjia_redis.pipelines.DBPipeline': 350,
+    'lianjia_redis.pipelines.MongoPipeline': 350,
     'scrapy_redis.pipelines.RedisPipeline': 400,
 }
 

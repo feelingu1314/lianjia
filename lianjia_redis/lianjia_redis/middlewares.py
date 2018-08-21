@@ -4,10 +4,13 @@
 #
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-import random
+# import random
+import re
 from scrapy.exceptions import IgnoreRequest
 from datetime import datetime
 from scrapy import signals
+from datetime import datetime, date
+from redis import ConnectionPool, StrictRedis
 
 
 class LianjiaRedisSpiderMiddleware(object):
@@ -63,12 +66,16 @@ class FilterMiddleware(object):
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
 
-    # @classmethod
-    # def from_crawler(cls, crawler):
-    #     # This method is used by Scrapy to create your spiders.
-    #     s = cls()
-    #     crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
-    #     return s
+    def __init__(self, redis_uri):
+        self.redis_uri = redis_uri
+        self.redis_pool = ConnectionPool.from_url(self.redis_uri)
+        self.redis_client = StrictRedis(connection_pool=self.redis_pool)
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            redis_uri=crawler.settings.get('REDIS_URI'),
+        )
 
     def process_request(self, request, spider):
         # Called for each request that goes through the downloader

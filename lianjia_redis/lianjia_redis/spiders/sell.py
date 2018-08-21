@@ -11,17 +11,18 @@ class SellSpider(RedisCrawlSpider):
     name = 'sell'
     allow_domains = ['sh.lianjia.com', 'su.lianjia.com']
 
-    redis_key = 'SellSpider:start_urls'
+    redis_key = 'lianjia_ershoufang_sell:link'
     # start_urls = ['http://www.lianjia.com/']
 
     rules = (
-        Rule(LinkExtractor(allow=('/ershoufang/\d{12}.html',)), callback='parse_one', follow=False),
-        Rule(LinkExtractor(allow=('/ershoufang/',)), follow=True),
+        Rule(LinkExtractor(allow=()), callback='parse', follow=False)
+        # Rule(LinkExtractor(allow=('/ershoufang/\d{12}.html',)), callback='parse', follow=False),
+        # Rule(LinkExtractor(allow=('/ershoufang/',)), follow=True),
     )
 
-    def parse_one(self, response):
+    def parse(self, response):
         item = SellItem()
-        meta = response.url[8:10]
+        meta = response.request.meta['city']
 
         house_type = response.css(
             'div.transaction > div.content > ul > li:nth-child(4) > span:nth-child(2)::text'
@@ -53,7 +54,7 @@ class SellSpider(RedisCrawlSpider):
             item['交易属性'] = {}
             trade_attr_items = response.css(
                 '#introduction > div > div > div.transaction > div.content > ul > li > span.label::text'
-            ).extract()  # 标签键
+            ).extract()# 标签键
             for i, trade_attr_key in enumerate(trade_attr_items, 1):
                 trade_attr_value = response.css(
                     '#introduction > div > div > div.transaction > div.content > ul > li:nth-child({}) > span:nth-child(2)::text'.format(i)
@@ -119,16 +120,17 @@ class SellSpider(RedisCrawlSpider):
             item['环线信息'] = loop_info
             item['建造时间'] = build_time
             item['链家编号'] = lj_id
+            item['城市'] = meta
             item['房源链接'] = response.url
             item['户型分间'] = model_details
-            item['房源热度'] = {'关注人数': int(follower)}
-            item['小区概况'] = {'hid': hid, 'rid': rid}
-            item['城市'] = meta
+            item['房源热度'] = {'关注人数':int(follower)}
+            item['小区概况'] = {'hid':hid, 'rid':rid}
 
-            house_stat_url = 'https://{0}.lianjia.com/ershoufang/housestat?hid={1}&rid={2}'.format(meta, rid, hid)  # request时参数错位
-            request = scrapy.Request(url=house_stat_url, meta={'city':meta}, callback=self.parse_location, dont_filter=True)
-            request.meta['item'] = item
-            yield request
+            if hid and rid:
+                house_stat_url = 'https://{0}.lianjia.com/ershoufang/housestat?hid={1}&rid={2}'.format(meta, rid, hid)  # request时参数错位
+                request = scrapy.Request(url=house_stat_url, meta={'city':meta}, callback=self.parse_location, dont_filter=True)
+                request.meta['item'] = item
+                yield request
 
     def parse_location(self, response):
         item = response.meta['item']
