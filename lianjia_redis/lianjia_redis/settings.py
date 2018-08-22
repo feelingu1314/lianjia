@@ -109,6 +109,9 @@ ITEM_PIPELINES = {
     # 'scrapy_redis.pipelines.RedisPipeline': 400,
 }
 
+# Enable and Configure log
+LOG_LEVEL = 'INFO'
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 # AUTOTHROTTLE_ENABLED = True
