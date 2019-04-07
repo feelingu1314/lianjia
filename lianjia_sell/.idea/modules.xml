@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../lianjia_deal/.idea/lianjia_deal.iml" filepath="$PROJECT_DIR$/../lianjia_deal/.idea/lianjia_deal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../lianjia_sale/.idea/lianjia_sale.iml" filepath="$PROJECT_DIR$/../lianjia_sale/.idea/lianjia_sale.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/lianjia_sell.iml" filepath="$PROJECT_DIR$/.idea/lianjia_sell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../lianjia_sold/.idea/lianjia_sold.iml" filepath="$PROJECT_DIR$/../lianjia_sold/.idea/lianjia_sold.iml" />
+    </modules>
+  </component>
+</project>
