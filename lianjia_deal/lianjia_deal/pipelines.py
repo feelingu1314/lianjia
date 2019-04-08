@@ -15,7 +15,7 @@ class LianjiaDealPipeline(object):
         item['houseInfo'] = '+'.join([i.strip() for i in item['houseInfo'].split('|')])
         item['priceQuote'] = float(item['priceQuote']) if item['priceQuote'] not in ['暂无数据'] else 0
         item['priceDeal'] = float(item['priceDeal']) if item['priceDeal'] not in ['暂无数据'] and item['priceDeal'] else 0
-        item['priceDealUnit'] = float(item['priceDealUnit'])/1000 if item['priceDealUnit'] not in ['暂无数据'] and \
+        item['priceDealUnit'] = float(item['priceDealUnit'])/10000 if item['priceDealUnit'] not in ['暂无数据'] and \
                                                                      item['priceDealUnit'] else 0
         item['dateDeal'] = item['dateDeal'].replace('.', '-')[:-3]
         item['dateQuote'] = item['dateQuote'].strip()

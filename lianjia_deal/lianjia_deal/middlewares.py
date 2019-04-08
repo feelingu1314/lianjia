@@ -105,6 +105,8 @@ class LianjiaDealDownloaderMiddleware(object):
         # - or raise IgnoreRequest
         if response.status == 200 and re.search(r'/chengjiao/\d{12}.html', response.url):
             self.redis_client.sadd(self.set_name, response.url)
+        elif response.status != 200:
+            raise IgnoreRequest()
         return response
 
     def process_exception(self, request, exception, spider):
