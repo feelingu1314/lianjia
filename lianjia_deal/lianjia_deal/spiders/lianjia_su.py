@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-
+from lianjia_deal.items import LianjiaDealItem
 
 class LianjiaSuSpider(scrapy.Spider):
     name = 'lianjia_su'
