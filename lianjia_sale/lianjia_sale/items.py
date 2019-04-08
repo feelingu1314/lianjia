@@ -32,5 +32,6 @@ class LianjiaSaleItem(Item):
     release = Field()
     link = Field()
     city = Field()  # -->string
+    dateQuote = Field()
     date = Field()
     timestamp = Field()

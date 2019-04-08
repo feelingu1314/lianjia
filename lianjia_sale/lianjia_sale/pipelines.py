@@ -18,7 +18,8 @@ class LianjiaSalePipeline(object):
         item['loop'] = item['loop'].strip()
         item['codeComm'] = item['codeComm'][0]
         item['focus'] = int(item['focus'])
-        item['watch'] = int(item['watch'])
+        # item['watch'] = int(item['watch'])
+        item['dateQuote'] = item['dateQuote'].strip() if item['dateQuote'] not in ['暂无数据'] and item['dateQuote'] else 'NaN'
         item['date'] = date.today().strftime('%Y-%m-%d')
         item['timestamp'] = datetime.now().strftime('%H:%M:%S')
         return item

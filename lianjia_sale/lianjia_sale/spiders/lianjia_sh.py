@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import scrapy
-import re
 from lianjia_sale.items import LianjiaSaleItem
 
 
@@ -20,14 +19,15 @@ class LianjiaShSpider(scrapy.Spider):
         links = response.xpath('//*[@id="content"]/div[1]/ul/li/a/@href').getall()
         if links:
             for idx, link in enumerate(links, 1):
-                item = LianjiaSaleItem()
-                info = response.xpath('//*[@id="content"]/div[1]/ul/li[%d]/div[1]/div[4]/text()' % idx).get().split('/')
-                item['focus'] = re.search('\d+', info[0])[0]
-                item['watch'] = re.search('\d+', info[1])[0]
-                item['release'] = info[2]
-                item['link'] = link
+                # item = LianjiaSaleItem()
+                # info = response.xpath('//*[@id="content"]/div[1]/ul/li[%d]/div[1]/div[4]/text()' % idx).get().split('/')
+                # item['focus'] = re.search('\d+', info[0])[0]
+                # item['watch'] = re.search('\d+', info[1])[0]
+                # item['release'] = info[2]
+                # item['link'] = link
                 # print('parse_detailPage:', link)
-                yield scrapy.Request(url=link, callback=self.parse_detail, meta={'item': item}, dont_filter=True)
+                # yield scrapy.Request(url=link, callback=self.parse_detail, meta={'item': item}, dont_filter=True)
+                yield scrapy.Request(url=link, callback=self.parse_detail, dont_filter=True)
 
         curPage = response.xpath('//*[@id="content"]/div[1]/div[8]/div[2]/div/@page-data').re('"curPage":(.*?)}')
         urlPage = response.xpath('//*[@id="content"]/div[1]/div[8]/div[2]/div/@page-url').get()
@@ -61,7 +61,9 @@ class LianjiaShSpider(scrapy.Spider):
                 yield scrapy.Request(url=self.start_url+link, callback=self.parse, dont_filter=True)
 
     def parse_detail(self, response):
-        item = response.meta['item']
+        item = LianjiaSaleItem()
+        item['focus'] = response.xpath('//*[@id="favCount"]/text()').get()
+        item['link'] = response.url
         item['label'] = response.xpath('/html/body/div[3]/div/div/div[1]/div/text()').get()
         item['priceTotal'] = response.xpath('/html/body/div[5]/div[2]/div[2]/span[1]/text()').get()
         item['priceUnit'] = response.xpath('/html/body/div[5]/div[2]/div[2]/div[1]/div[1]/span/text()').get()
@@ -74,5 +76,6 @@ class LianjiaShSpider(scrapy.Spider):
         item['orient'] = response.xpath('/html/body/div[5]/div[2]/div[3]/div[2]/div[1]/text()').get()
         item['area'] = response.xpath('/html/body/div[5]/div[2]/div[3]/div[3]/div[1]/text()').get()
         item['room'] = response.xpath('/html/body/div[5]/div[2]/div[3]/div[1]/div[1]/text()').get()
+        item['dateQuote'] = response.xpath('//*[@id="introduction"]/div/div/div[2]/div[2]/ul/li[1]/span[2]/text()').get()
         item['city'] = 'sh'
         yield item

@@ -1,5 +1,5 @@
-# import link from MongoDB to Redis "lianjia_deal:link"
-# run it before spider running for filter duplicate link
+# import link from MongoDB to Redis "lianjia_sale:link"
+# run it before spider running for looking up link crawled one day ago
 
 import redis
 import time
@@ -10,13 +10,13 @@ if __name__ == '__main__':
     # MongoDB
     mongo_uri = 'mongodb://lianjia:lianjia@127.0.0.1:27017/lianjia'
     mongo_db = 'lianjia'
-    collection = ['sh_chengjiao', 'su_chengjiao']
+    collection = ['sh_ershoufang', 'su_ershoufang']
     client = MongoClient(mongo_uri)
     db = client[mongo_db]
 
     # Redis
     redis_uri = 'redis://:houwei2019@127.0.0.1:6379/1'
-    set_name = 'lianjia_deal:link'
+    set_name = 'lianjia_sale_day:link'
     redis_pool = redis.ConnectionPool.from_url(redis_uri)
     redis_client = redis.StrictRedis(connection_pool=redis_pool)
 
