@@ -69,8 +69,6 @@ class LianjiaDealDownloaderMiddleware(object):
         self.redis_uri = redis_uri
         self.redis_pool = redis.ConnectionPool.from_url(self.redis_uri)
         self.redis_client = redis.StrictRedis(connection_pool=self.redis_pool)
-        print('test_redis')
-
 
     @classmethod
     def from_crawler(cls, crawler):

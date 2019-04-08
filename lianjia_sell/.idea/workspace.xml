@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b37fe611-854c-45af-8c9a-3ba24f3ffd67" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/spiders/lianjia_su.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/spiders/lianjia_su.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/middlewares.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/middlewares.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/middlewares.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/middlewares.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,73 +22,100 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="56" />
+          <entry key="py" value="66" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="56" />
+          <entry key="Python" value="66" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="4079" />
+          <entry key="py" value="4113" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="4079" />
+          <entry key="Python" value="4113" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../t.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret selection-end-line="2" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/spiders/lianjia_su.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="40">
-              <caret line="2" column="46" selection-start-line="2" selection-start-column="46" selection-end-line="2" selection-end-column="46" />
-              <folding>
-                <element signature="e#24#37#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/spiders/lianjia_sz.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <folding>
-                <element signature="e#24#37#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/spiders/lianjia_sh.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="46" />
-              <folding>
-                <marker date="1554399083204" expanded="true" signature="317:566" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.40778252">
+      <split-first>
+        <leaf>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/middlewares.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="500">
+                  <caret line="100" column="36" lean-forward="true" selection-start-line="100" selection-start-column="36" selection-end-line="100" selection-end-column="36" />
+                  <folding>
+                    <element signature="e#169#181#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/settings.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="420">
+                  <caret line="21" column="50" lean-forward="true" selection-start-line="21" selection-start-column="50" selection-end-line="21" selection-end-column="50" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/../../../t.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state>
+                  <caret selection-end-line="2" selection-end-column="8" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_sh.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="780">
+                  <caret line="39" column="29" selection-start-line="39" selection-start-column="29" selection-end-line="39" selection-end-column="29" />
+                  <folding>
+                    <element signature="e#24#37#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/settings.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1560">
+                  <caret line="78" lean-forward="true" selection-start-line="78" selection-end-line="78" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/middlewares.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="394">
+                  <caret line="102" column="61" selection-start-line="102" selection-start-column="61" selection-end-line="102" selection-end-column="61" />
+                  <folding>
+                    <element signature="e#169#181#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -106,7 +135,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/settings.py" />
         <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/items.py" />
         <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_sh.py" />
         <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/items.py" />
@@ -116,9 +144,11 @@
         <option value="$PROJECT_DIR$/../lianjia_sold/lianjia_sold/dayfilter.py" />
         <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/settings.py" />
         <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/pipelines.py" />
-        <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/middlewares.py" />
         <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/import2redis.py" />
         <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/spiders/lianjia_su.py" />
+        <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/middlewares.py" />
+        <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/middlewares.py" />
+        <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/settings.py" />
       </list>
     </option>
   </component>
@@ -282,7 +312,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24946696" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.24946696" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="Python Console" order="1" />
@@ -297,7 +327,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Terminal" order="3" visible="true" weight="0.37579957" />
+      <window_info anchor="right" id="Terminal" order="3" weight="0.37579957" />
     </layout>
     <layout-to-restore>
       <window_info id="Favorites" order="0" side_tool="true" />
@@ -361,11 +391,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lianjia_sell/middlewares.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1200" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../lianjia_sold/lianjia_sold/spiders/sold.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -418,26 +443,6 @@
     <entry file="file://$PROJECT_DIR$/../lianjia_sold/lianjia_sold/sync2es.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/middlewares.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="101" column="22" lean-forward="true" selection-start-line="101" selection-start-column="22" selection-end-line="101" selection-end-column="22" />
-          <folding>
-            <element signature="e#169#181#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_sh.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="39" column="29" selection-start-line="39" selection-start-column="29" selection-end-line="39" selection-end-column="29" />
-          <folding>
-            <element signature="e#24#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/pipelines.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
@@ -475,13 +480,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lianjia_sell/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1840">
-          <caret line="93" column="4" lean-forward="true" selection-start-line="93" selection-end-line="94" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/import2redis.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -490,27 +488,6 @@
             <element signature="e#88#100#0" expanded="true" />
             <marker date="1554564389315" expanded="true" signature="262:274" ph="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="18" column="25" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="659">
-          <caret line="39" column="32" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../t.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="2" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -539,6 +516,67 @@
           <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="46" />
           <folding>
             <marker date="1554399083204" expanded="true" signature="317:566" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lianjia_sell/middlewares.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lianjia_sell/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="857">
+          <caret line="93" column="4" lean-forward="true" selection-start-line="93" selection-end-line="94" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../t.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="2" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_sh.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="39" column="29" selection-start-line="39" selection-start-column="29" selection-end-line="39" selection-end-column="29" />
+          <folding>
+            <element signature="e#24#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/middlewares.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="394">
+          <caret line="102" column="61" selection-start-line="102" selection-start-column="61" selection-end-line="102" selection-end-column="61" />
+          <folding>
+            <element signature="e#169#181#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1560">
+          <caret line="78" lean-forward="true" selection-start-line="78" selection-end-line="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="21" column="50" lean-forward="true" selection-start-line="21" selection-start-column="50" selection-end-line="21" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/middlewares.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="100" column="36" lean-forward="true" selection-start-line="100" selection-start-column="36" selection-end-line="100" selection-end-column="36" />
+          <folding>
+            <element signature="e#169#181#0" expanded="true" />
           </folding>
         </state>
       </provider>

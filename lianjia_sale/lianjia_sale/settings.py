@@ -18,6 +18,9 @@ NEWSPIDER_MODULE = 'lianjia_sale.spiders'
 MONGO_URI = 'mongodb://lianjia:lianjia@127.0.0.1:27017/lianjia'
 MONGO_DATABASE = 'lianjia'
 
+# Redis Connection
+REDIS_URI = 'redis://:houwei2019@127.0.0.1:6379/1'
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'lianjia_sale (+http://www.yourdomain.com)'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
@@ -56,9 +59,9 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'lianjia_sale.middlewares.LianjiaSaleDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'lianjia_sale.middlewares.LianjiaSaleDownloaderMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -69,8 +72,8 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'lianjia_sale.pipelines.LianjiaSalePipeline': 300,
    'lianjia_sale.pipelines.DuplicatesPipeline': 290,
+   'lianjia_sale.pipelines.LianjiaSalePipeline': 300,
    'lianjia_sale.pipelines.MongoPipeline': 350,
 }
 
