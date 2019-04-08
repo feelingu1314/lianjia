@@ -44,7 +44,7 @@ class DuplicatesPipeline(object):
 
 class MongoPipeline(object):
 
-    collection_name = 'sh_chengjiao'
+    collection_name = '{}_chengjiao'
 
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -65,8 +65,8 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        if self.db[self.collection_name].count({'code': item['code']}) > 0:
+        if self.db[self.collection_name.format(item['city'])].count({'code': item['code']}) > 0:
             raise DropItem("duplicate: %s" % item['code'])
         else:
-            self.db[self.collection_name].insert_one(dict(item))
+            self.db[self.collection_name.format(item['city'])].insert_one(dict(item))
         return item
