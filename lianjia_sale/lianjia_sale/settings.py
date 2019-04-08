@@ -15,7 +15,7 @@ SPIDER_MODULES = ['lianjia_sale.spiders']
 NEWSPIDER_MODULE = 'lianjia_sale.spiders'
 
 # MongoDB
-MONGO_URI = 'mongodb://lianjia@lianjia127.0.0.1:27017/lianjia'
+MONGO_URI = 'mongodb://lianjia:lianjia@127.0.0.1:27017/lianjia'
 MONGO_DATABASE = 'lianjia'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
