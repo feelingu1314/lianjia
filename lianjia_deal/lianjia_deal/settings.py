@@ -15,11 +15,11 @@ SPIDER_MODULES = ['lianjia_deal.spiders']
 NEWSPIDER_MODULE = 'lianjia_deal.spiders'
 
 # MongoDB
-MONGO_URI = 'mongodb://106.13.38.208:27017'
+MONGO_URI = 'mongodb://lianjia@lianjia127.0.0.1:27017/lianjia'
 MONGO_DATABASE = 'lianjia'
 
 # Redis Connection
-REDIS_URI = 'redis://106.13.38.208:6379/1'
+REDIS_URI = 'redis://127.0.0.1:6379/1'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'lianjia_deal (+http://www.yourdomain.com)'
