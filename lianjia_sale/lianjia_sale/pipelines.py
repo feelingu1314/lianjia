@@ -12,7 +12,8 @@ from scrapy.exceptions import DropItem
 class LianjiaSalePipeline(object):
     def process_item(self, item, spider):
         item['priceTotal'] = float(item['priceTotal'])
-        item['priceUnit'] = float(item['priceUnit'])/10000
+        item['priceUnit'] = float(item['priceUnit'])/10000 if item['priceUnit'] not in ['暂无数据'] and \
+                                                              item['priceUnit'] else 0
         item['area'] = float(item['area'][:-2])
         item['loop'] = item['loop'].strip()
         item['codeComm'] = item['codeComm'][0]
@@ -38,7 +39,7 @@ class DuplicatesPipeline(object):
 
 class MongoPipeline(object):
 
-    collection_name = 'sh_ershoufang'
+    collection_name = '{}_ershoufang'
 
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -59,8 +60,8 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        if self.db[self.collection_name].count({'date': item['date'], 'code': item['code']}) > 0:
+        if self.db[self.collection_name.format(item['city'])].count({'date': item['date'], 'code': item['code']}) > 0:
             raise DropItem("duplicate: %s" % item['code'])
         else:
-            self.db[self.collection_name].insert_one(dict(item))
+            self.db[self.collection_name.format(item['city'])].insert_one(dict(item))
         return item
