@@ -19,7 +19,7 @@ MONGO_URI = 'mongodb://lianjia:lianjia@127.0.0.1:27017/lianjia'
 MONGO_DATABASE = 'lianjia'
 
 # Redis Connection
-REDIS_URI = 'redis://houwei2019@127.0.0.1:6379/1'
+REDIS_URI = 'redis://:houwei2019@127.0.0.1:6379/1'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'lianjia_deal (+http://www.yourdomain.com)'
