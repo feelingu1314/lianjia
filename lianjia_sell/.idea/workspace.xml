@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b37fe611-854c-45af-8c9a-3ba24f3ffd67" name="Default Changelist" comment="add suzhou of spider of lianjia_sale">
-      <change afterPath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/import2redis.py" afterDir="false" />
+    <list default="true" id="b37fe611-854c-45af-8c9a-3ba24f3ffd67" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/import2redis.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/import2redis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/items.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/items.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/pipelines.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_sh.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_sh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_su.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_su.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,14 +31,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="4626" />
-          <entry key="txt" value="50" />
+          <entry key="py" value="4667" />
+          <entry key="txt" value="157" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="50" />
-          <entry key="Python" value="4626" />
+          <entry key="PLAIN_TEXT" value="157" />
+          <entry key="Python" value="4667" />
         </counts>
       </usages-collector>
     </session>
@@ -100,8 +95,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/import2redis.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="340">
-                  <caret line="17" column="16" lean-forward="true" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="54" />
+                <state relative-caret-position="460">
+                  <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
                   <folding>
                     <element signature="e#88#100#0" expanded="true" />
                   </folding>
@@ -131,11 +126,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/import2redis.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="360">
-                  <caret line="18" column="16" lean-forward="true" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="37" />
+                <state relative-caret-position="500">
+                  <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="35" />
                   <folding>
                     <element signature="e#114#126#0" expanded="true" />
                   </folding>
@@ -182,7 +177,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/pipelines.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="420">
+                <state relative-caret-position="-180">
                   <caret line="21" column="44" lean-forward="true" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
                   <folding>
                     <element signature="e#193#207#0" expanded="true" />
@@ -191,7 +186,7 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/middlewares.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="840">
@@ -235,14 +230,14 @@
         <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/middlewares.py" />
         <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/middlewares.py" />
         <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/items.py" />
-        <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/import2redis.py" />
-        <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/import2redis.py" />
         <option value="$PROJECT_DIR$/../../../t.py" />
         <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/pipelines.py" />
         <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_day.py" />
         <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_sh.py" />
         <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_su.py" />
         <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/settings.py" />
+        <option value="$PROJECT_DIR$/../lianjia_sale/lianjia_sale/import2redis.py" />
+        <option value="$PROJECT_DIR$/../lianjia_deal/lianjia_deal/import2redis.py" />
       </list>
     </option>
   </component>
@@ -378,7 +373,21 @@
       <option name="project" value="LOCAL" />
       <updated>1554736370715</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add lianjia_day for spider sale&#10;add import2redis for spider sale&#10;update import2redis for spider deal">
+      <created>1554744895311</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1554744895311</updated>
+    </task>
+    <task id="LOCAL-00003" summary="update import2redis for spider sale">
+      <created>1554745162438</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1554745162438</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -454,7 +463,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add suzhou of spider of lianjia_sale" />
-    <option name="LAST_COMMIT_MESSAGE" value="add suzhou of spider of lianjia_sale" />
+    <MESSAGE value="add lianjia_day for spider sale&#10;add import2redis for spider sale&#10;update import2redis for spider deal" />
+    <MESSAGE value="update import2redis for spider sale" />
+    <option name="LAST_COMMIT_MESSAGE" value="update import2redis for spider sale" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/lianjia_sell/spiders/district.py">
@@ -617,16 +628,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/import2redis.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="17" column="16" lean-forward="true" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="54" />
-          <folding>
-            <element signature="e#88#100#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../../t.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="20">
@@ -648,26 +649,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40">
           <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/pipelines.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="21" column="44" lean-forward="true" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
-          <folding>
-            <element signature="e#193#207#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_day.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="18" column="37" lean-forward="true" selection-start-line="18" selection-start-column="37" selection-end-line="18" selection-end-column="37" />
-          <folding>
-            <element signature="e#24#37#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -695,22 +676,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/import2redis.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="18" column="16" lean-forward="true" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="37" />
-          <folding>
-            <element signature="e#114#126#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/middlewares.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="840">
           <caret line="102" column="61" selection-start-line="102" selection-start-column="61" selection-end-line="102" selection-end-column="61" />
           <folding>
             <element signature="e#169#181#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/spiders/lianjia_day.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="18" column="37" lean-forward="true" selection-start-line="18" selection-start-column="37" selection-end-line="18" selection-end-column="37" />
+          <folding>
+            <element signature="e#24#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/pipelines.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-180">
+          <caret line="21" column="44" lean-forward="true" selection-start-line="21" selection-start-column="44" selection-end-line="21" selection-end-column="44" />
+          <folding>
+            <element signature="e#193#207#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../lianjia_sale/lianjia_sale/import2redis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="35" />
+          <folding>
+            <element signature="e#114#126#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../lianjia_deal/lianjia_deal/import2redis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+          <folding>
+            <element signature="e#88#100#0" expanded="true" />
           </folding>
         </state>
       </provider>

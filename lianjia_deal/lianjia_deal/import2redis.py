@@ -21,6 +21,7 @@ if __name__ == '__main__':
     redis_client = redis.StrictRedis(connection_pool=redis_pool)
 
     start_time = time.time()
+    redis_client.delete(set_name)
     for col in collection:
         for i in db[col].find({}, {'_id': 0, 'link': 1}).batch_size(1000):
             redis_client.sadd(set_name, i['link'])
