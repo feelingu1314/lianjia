@@ -19,7 +19,7 @@ class LianjiaXiaoquPipeline(object):
             item['rent'][0:-5]) if item['rent'] not in ['暂无数据'] and item['rent'] else 0
         item['age'] = ''.join(item['age'].strip().split())
         item['age'] = int(
-            item['age'][1:-3]) if item['age'] not in ['暂无数据', '暂无信息', '未知年建成'] and item['age'] else 0
+            item['age'][1:-3]) if item['age'][1:] not in ['暂无数据', '暂无信息', '未知年建成'] and item['age'] else 0
         item['label'] = item['label'] if item['label'] else ''
         item['focus'] = int(item['focus']) if item['focus'] not in [
             '暂无数据'] and item['focus'] else 0
