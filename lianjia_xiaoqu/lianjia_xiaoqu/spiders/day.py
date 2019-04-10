@@ -19,9 +19,10 @@ class DaySpider(scrapy.Spider):
             redis_client.srem(set_name, i)
             tmp = i.decode('utf-8').split('+')
             community = tmp[0]
-            start_url = re.search(r'https://\w+.lianjia.com/xiaoqu/', tmp[1])[0]
-            print(start_url+'rs'+community+'/')
-            # yield scrapy.Request(url=redis_url.decode('utf-8'), callback=self.parse, dont_filter=True)
+            if tmp[1]:
+                start_url = re.search(r'https://\w+.lianjia.com/xiaoqu/', tmp[1])[0]
+            # print(start_url+'rs'+community+'/')
+                yield scrapy.Request(url=start_url+'rs'+community+'/', callback=self.parse, dont_filter=True)
 
     def parse(self, response):
         # parsing by page
@@ -43,6 +44,7 @@ class DaySpider(scrapy.Spider):
                 item['link'] = link
                 item['city'] = re.search(r'https://(.*?).lianjia.com', link)[1]
                 print(re.search(r'https://(.*?).lianjia.com', link)[1])
+                print(item)
                 # yield scrapy.Request(url=link, callback=self.parse_detail, meta={'item': item}, dont_filter=True)
 
         # curPage = response.xpath('/html/body/div[4]/div[1]/div[3]/div[2]/div/@page-data').re('"curPage":(.*?)}')
