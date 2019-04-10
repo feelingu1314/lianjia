@@ -5,7 +5,10 @@
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+import redis
+import re
 from scrapy import signals
+from scrapy.exceptions import IgnoreRequest
 
 
 class LianjiaXiaoquSpiderMiddleware(object):
@@ -61,10 +64,17 @@ class LianjiaXiaoquDownloaderMiddleware(object):
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
 
+    set_name = 'lianjia_xiaoqu:link'
+
+    def __init__(self, redis_uri):
+        self.redis_uri = redis_uri
+        self.redis_pool = redis.ConnectionPool.from_url(self.redis_uri)
+        self.redis_client = redis.StrictRedis(connection_pool=self.redis_pool)
+
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
-        s = cls()
+        s = cls(redis_uri=crawler.settings.get('REDIS_URI'))
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
@@ -78,6 +88,10 @@ class LianjiaXiaoquDownloaderMiddleware(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
+        if self.redis_client.sismember(self.set_name, request.url):
+            raise IgnoreRequest()
+        elif re.search(r'/xiaoqu/\d{13}/', request.url):
+            self.redis_client.sadd(self.set_name, request.url)
         return None
 
     def process_response(self, request, response, spider):
@@ -87,6 +101,10 @@ class LianjiaXiaoquDownloaderMiddleware(object):
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
+        if response.status == 200 and re.search(r'/xiaoqu/\d{13}/', response.url):
+            self.redis_client.sadd(self.set_name, response.url)
+        elif response.status != 200:
+            raise IgnoreRequest()
         return response
 
     def process_exception(self, request, exception, spider):

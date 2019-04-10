@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from lianjia_xiaoqu import LianjiaXiaoquItem
+from lianjia_xiaoqu.items import LianjiaXiaoquItem
 
 
 class ShSpider(scrapy.Spider):
@@ -11,6 +11,8 @@ class ShSpider(scrapy.Spider):
 
     def start_requests(self):
         yield scrapy.Request(url=self.start_url + '/xiaoqu/rs/', callback=self.parse, dont_filter=True)
+        yield scrapy.Request(url=self.start_url+'/xiaoqu/rs/', callback=self.parse_location, meta={'page': 'index'}, dont_filter=True)
+
 
     def parse(self, response):
         # parsing by page
@@ -32,7 +34,6 @@ class ShSpider(scrapy.Spider):
                 item['link'] = link
                 item['city'] = 'sh'
                 yield scrapy.Request(url=link, callback=self.parse_detail, meta={'item': item}, dont_filter=True)
-                # yield scrapy.Request(url=link, callback=self.parse_detail, dont_filter=True)
 
         curPage = response.xpath('/html/body/div[4]/div[1]/div[3]/div[2]/div/@page-data').re('"curPage":(.*?)}')
         urlPage = response.xpath('/html/body/div[4]/div[1]/div[3]/div[2]/div/@page-url').get()
@@ -45,24 +46,12 @@ class ShSpider(scrapy.Spider):
         # parsing by location
         page = response.meta.get('page', 'ignore')
         if page == 'index':
-            districtLinks = response.xpath('/html/body/div[3]/div/div[1]/dl[2]/dd/div[1]/div/a/@href').getall()
+            districtLinks = response.xpath('/html/body/div[3]/div[1]/dl[2]/dd/div/div/a/@href').getall()
             for link in districtLinks:
                 yield scrapy.Request(url=self.start_url+link, callback=self.parse_location, dont_filter=True)
         else:
-            locLinks = response.xpath('/html/body/div[3]/div/div[1]/dl[2]/dd/div[1]/div[2]/a/@href').getall()
+            locLinks = response.xpath('/html/body/div[3]/div[1]/dl[2]/dd/div/div[2]/a/@href').getall()
             for link in locLinks:
-                yield scrapy.Request(url=self.start_url+link, callback=self.parse, dont_filter=True)
-
-    def parse_metro(self, response):
-        # parsing by metro
-        page = response.meta.get('page', 'ignore')
-        if page == 'index':
-            lineLinks = response.xpath('/html/body/div[3]/div/div[1]/dl[2]/dd/div[2]/div/a/@href').getall()
-            for link in lineLinks:
-                yield scrapy.Request(url=self.start_url+link, callback=self.parse_metro, dont_filter=True)
-        else:
-            stationLinks = response.xpath('/html/body/div[3]/div/div[1]/dl[2]/dd/div[2]/div[2]/a/@href').getall()
-            for link in stationLinks:
                 yield scrapy.Request(url=self.start_url+link, callback=self.parse, dont_filter=True)
 
     def parse_detail(self, response):

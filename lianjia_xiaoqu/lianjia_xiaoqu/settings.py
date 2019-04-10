@@ -14,12 +14,18 @@ BOT_NAME = 'lianjia_xiaoqu'
 SPIDER_MODULES = ['lianjia_xiaoqu.spiders']
 NEWSPIDER_MODULE = 'lianjia_xiaoqu.spiders'
 
+# MongoDB
+MONGO_URI = 'mongodb://lianjia:lianjia@127.0.0.1:27017/lianjia'
+MONGO_DATABASE = 'lianjia'
+
+# Redis Connection
+REDIS_URI = 'redis://:houwei2019@127.0.0.1:6379/1'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'lianjia_xiaoqu (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -52,9 +58,9 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'lianjia_xiaoqu.middlewares.LianjiaXiaoquDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'lianjia_xiaoqu.middlewares.LianjiaXiaoquDownloaderMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -64,9 +70,13 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'lianjia_xiaoqu.pipelines.LianjiaXiaoquPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'lianjia_xiaoqu.pipelines.DuplicatesPipeline': 290,
+   'lianjia_xiaoqu.pipelines.LianjiaXiaoquPipeline': 300,
+}
+
+# Enable and Configure log
+LOG_LEVEL = 'INFO'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
