@@ -15,8 +15,11 @@ class LianjiaSalePipeline(object):
         item['priceUnit'] = float(item['priceUnit'])/10000 if item['priceUnit'] not in ['暂无数据'] and \
                                                               item['priceUnit'] else 0
         item['area'] = float(item['area'][:-2])
-        item['loop'] = item['loop'].strip()
-        item['codeComm'] = item['codeComm'][0]
+        item['loop'] = item['loop'].strip() if item['loop'] else 'NaN'
+        item['community'] = item['community'] if item['community'] else 'NaN'
+        item['district'] = item['district'] if item['district'] else 'NaN'
+        item['position'] = item['position'] if item['position'] else 'NaN'
+        item['codeComm'] = item['codeComm'][0] if item['codeComm'] else 'NaN'
         item['focus'] = int(item['focus'])
         # item['watch'] = int(item['watch'])
         item['dateQuote'] = item['dateQuote'].strip() if item['dateQuote'] not in ['暂无数据'] and item['dateQuote'] else 'NaN'
