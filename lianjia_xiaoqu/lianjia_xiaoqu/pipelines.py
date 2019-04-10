@@ -61,7 +61,7 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        if self.db[self.collection_name.format(item['city'])].count({'date': item['date'], 'code': item['code']}) > 0:
+        if self.db[self.collection_name.format(item['city'])].count({'date': item['date'], 'codeComm': item['codeComm']}) > 0:
             raise DropItem("duplicate: %s" % item['codeComm'])
         else:
             self.db[self.collection_name.format(item['city'])].insert_one(dict(item))
