@@ -90,7 +90,7 @@ class LianjiaXiaoquDownloaderMiddleware(object):
         #   installed downloader middleware will be called
         if self.redis_client.sismember(self.set_name, request.url):
             raise IgnoreRequest()
-        elif re.search(r'/xiaoqu/\d{13}/', request.url):
+        elif re.search(r'/xiaoqu/\d{16}/', request.url):
             self.redis_client.sadd(self.set_name, request.url)
         return None
 
@@ -101,7 +101,7 @@ class LianjiaXiaoquDownloaderMiddleware(object):
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
-        if response.status == 200 and re.search(r'/xiaoqu/\d{13}/', response.url):
+        if response.status == 200 and re.search(r'/xiaoqu/\d{16}/', response.url):
             self.redis_client.sadd(self.set_name, response.url)
         elif response.status != 200:
             raise IgnoreRequest()
