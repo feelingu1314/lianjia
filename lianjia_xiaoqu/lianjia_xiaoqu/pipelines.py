@@ -5,24 +5,21 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
+import re
 from datetime import datetime, date
 from scrapy.exceptions import DropItem
 
 
 class LianjiaXiaoquPipeline(object):
     def process_item(self, item, spider):
-        item['priceUnit'] = float(
-            item['priceUnit']) / 10000 if item['priceUnit'] not in ['暂无数据', '暂无'] and item['priceUnit'] else 0
-        item['sale'] = int(item['sale']) if item['sale'] not in ['暂无数据', '暂无'] and item['sale'] else 0
-        item['deal'] = int(item['deal'][5:-1]) if item['deal'] not in ['暂无数据'] and item['deal'] else 0
-        item['rent'] = int(
-            item['rent'][0:-5]) if item['rent'] not in ['暂无数据'] and item['rent'] else 0
-        item['age'] = ''.join(item['age'].strip().split())
-        item['age'] = int(
-            item['age'][1:-3]) if item['age'][1:] not in ['暂无数据', '暂无信息', '未知年建成'] and item['age'] else 0
+        item['priceUnit'] = float(item['priceUnit']) / 10000 if re.search(r'\d+', item['priceUnit']) else 0
+        item['sale'] = int(item['sale']) if re.search(r'\d+', item['sale']) else 0
+        item['deal'] = int(re.search(r'90.*?(\d+)', item['deal'])[1]) if re.search(r'90.*?(\d+)', item['deal']) else 0
+        item['rent'] = int(re.search(r'\d+', item['rent'])[0]) if re.search(r'\d+', item['rent']) else 0
+        item['age'] = item['age'].split()[-1]
+        item['age'] = int(re.search(r'\d+', item['age'])[0]) if re.search(r'\d+', item['age']) else 0
         item['label'] = item['label'] if item['label'] else ''
-        item['focus'] = int(item['focus']) if item['focus'] not in [
-            '暂无数据'] and item['focus'] else 0
+        item['focus'] = int(re.search(r'\d+', item['focus'])[0]) if re.search(r'\d+', item['focus']) else 0
         item['date'] = date.today().strftime('%Y-%m-%d')
         item['timestamp'] = datetime.now().strftime('%H:%M:%S')
         return item
