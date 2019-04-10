@@ -13,7 +13,9 @@ class LianjiaDaySpider(scrapy.Spider):
         redis_uri = 'redis://:houwei2019@127.0.0.1:6379/1'
         redis_pool = ConnectionPool.from_url(redis_uri)
         redis_client = StrictRedis(connection_pool=redis_pool)
-        for redis_url in redis_client.sscan_iter('lianjia_sale_day:link'):
+        set_name = 'lianjia_sale_day:link'
+        for redis_url in redis_client.sscan_iter(set_name):
+            redis_client.srem(set_name, redis_url)
             yield scrapy.Request(url=redis_url.decode('utf-8'), callback=self.parse_detail, dont_filter=True)
 
     def parse_detail(self, response):
