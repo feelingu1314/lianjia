@@ -90,7 +90,7 @@ class LianjiaDealDownloaderMiddleware(object):
 
         if self.redis_client.sismember(self.set_name, request.url):
             raise IgnoreRequest()
-        elif re.search(r'/chengjiao/\w{2}\d{12}.html', request.url):
+        elif re.search(r'/chengjiao/\w{2}\d{10,12}.html', request.url):
             raise IgnoreRequest()
         elif re.search(r'/chengjiao/\d{12}.html', request.url):
             self.redis_client.sadd(self.set_name, request.url)
