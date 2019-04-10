@@ -43,9 +43,9 @@ class DaySpider(scrapy.Spider):
                     if response.xpath('/html/body/div[4]/div[1]/ul/li[%d]/div[1]/div[5]/span/text()' % idx).get() else ''
                 item['link'] = link
                 item['city'] = re.search(r'https://(.*?).lianjia.com', link)[1]
-                print(re.search(r'https://(.*?).lianjia.com', link)[1])
-                print(item)
-                # yield scrapy.Request(url=link, callback=self.parse_detail, meta={'item': item}, dont_filter=True)
+                # print(re.search(r'https://(.*?).lianjia.com', link)[1])
+                # print(item)
+                yield scrapy.Request(url=link, callback=self.parse_detail, meta={'item': item}, dont_filter=True)
 
         # curPage = response.xpath('/html/body/div[4]/div[1]/div[3]/div[2]/div/@page-data').re('"curPage":(.*?)}')
         # urlPage = response.xpath('/html/body/div[4]/div[1]/div[3]/div[2]/div/@page-url').get()
