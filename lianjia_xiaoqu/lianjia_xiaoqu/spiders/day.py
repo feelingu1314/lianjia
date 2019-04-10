@@ -17,7 +17,7 @@ class DaySpider(scrapy.Spider):
         set_name = 'lianjia_xiaoqu_day:link'
         for i in redis_client.sscan_iter(set_name):
             redis_client.srem(set_name, i)
-            tmp = i.split('+')
+            tmp = i.decode('utf-8').split('+')
             community = tmp[0].decode('utf-8')
             start_url = re.search(r'https://\w+.lianjia.com/xiaoqu/', tmp[1])[0]
             print(start_url+'rs'+community+'/')
