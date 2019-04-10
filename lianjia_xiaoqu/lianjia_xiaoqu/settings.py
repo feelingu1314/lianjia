@@ -73,6 +73,7 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
    'lianjia_xiaoqu.pipelines.DuplicatesPipeline': 290,
    'lianjia_xiaoqu.pipelines.LianjiaXiaoquPipeline': 300,
+   'lianjia_xiaoqu.pipelines.MongoPipeline': 350,
 }
 
 # Enable and Configure log
