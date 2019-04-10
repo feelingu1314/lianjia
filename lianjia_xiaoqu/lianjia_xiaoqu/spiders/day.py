@@ -18,7 +18,7 @@ class DaySpider(scrapy.Spider):
         for i in redis_client.sscan_iter(set_name):
             redis_client.srem(set_name, i)
             tmp = i.split('+')
-            community = tmp[0]
+            community = tmp[0].decode('utf-8')
             start_url = re.search(r'https://\w+.lianjia.com/xiaoqu/', tmp[1])[0]
             print(start_url+'rs'+community+'/')
             # yield scrapy.Request(url=redis_url.decode('utf-8'), callback=self.parse, dont_filter=True)
