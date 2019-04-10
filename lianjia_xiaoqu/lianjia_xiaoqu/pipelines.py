@@ -12,9 +12,8 @@ from scrapy.exceptions import DropItem
 class LianjiaXiaoquPipeline(object):
     def process_item(self, item, spider):
         item['priceUnit'] = float(
-            item['priceUnit']) / 10000 if item['priceUnit'] not in ['暂无数据'] and item['priceUnit'] else 0
-        item['sale'] = int(item['sale']) if item['sale'] not in [
-            '暂无数据'] and item['sale'] else 0
+            item['priceUnit']) / 10000 if item['priceUnit'] not in ['暂无数据', '暂无'] and item['priceUnit'] else 0
+        item['sale'] = int(item['sale']) if item['sale'] not in ['暂无数据', '暂无'] and item['sale'] else 0
         item['deal'] = int(item['deal'][5:-1]) if item['deal'] not in ['暂无数据'] and item['deal'] else 0
         item['rent'] = int(
             item['rent'][0:-5]) if item['rent'] not in ['暂无数据'] and item['rent'] else 0
