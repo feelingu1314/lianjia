@@ -15,7 +15,7 @@ SPIDER_MODULES = ['lianjia_deal.spiders']
 NEWSPIDER_MODULE = 'lianjia_deal.spiders'
 
 # MongoDB
-MONGO_URI = 'mongodb://lianjia:lianjia@127.0.0.1:27017/lianjia'
+MONGO_URI = 'mongodb://127.0.0.1:27017'
 MONGO_DATABASE = 'lianjia'
 
 # Redis Connection
